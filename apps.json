@@ -1,3 +1,48 @@
 {
-  "apps": []
+  "apps": [
+    {
+      "id": "orbitly",
+      "name": "Orbitly",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/orbitly_icon.png",
+      "platform": "Android",
+      "description": "",
+      "features": [],
+      "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/orbitly_dev.apk",
+        "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/orbitly_prod.apk"
+      },
+      "versions": {
+        "dev": "1.0.0+26072202",
+        "prod": "1.0.0+26072202"
+      },
+      "store": "",
+      "category": "Maps & Navigation",
+      "category_source": "store",
+      "store_updated": null,
+      "store_version": null
+    },
+    {
+      "id": "pullwave",
+      "name": "Pullwave",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_icon.png",
+      "platform": "Android",
+      "description": "",
+      "features": [],
+      "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/pullwave_dev.apk",
+        "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_prod.apk",
+        "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/pullwave.aab"
+      },
+      "versions": {
+        "dev": "1.0.0+26072701",
+        "prod": "1.0.0+26072701",
+        "aab": "1.0.0+26072701"
+      },
+      "store": "",
+      "category": "Tools",
+      "category_source": "store",
+      "store_updated": null,
+      "store_version": null
+    }
+  ]
 }
