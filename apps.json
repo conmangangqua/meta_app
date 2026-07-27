@@ -24,7 +24,7 @@
     {
       "id": "pullwave",
       "name": "Pullwave",
-      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_icon.png",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/dev/pullwave_icon.png",
       "platform": "Android",
       "description": "",
       "features": [],
@@ -33,7 +33,7 @@
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_prod.apk"
       },
       "versions": {
-        "dev": "1.0.0+26072201",
+        "dev": "1.0.0+26072701",
         "prod": "1.0.0+26072201"
       },
       "store": "",
