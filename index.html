@@ -352,7 +352,7 @@
           <div class="badge-row"><span class="badge ${isIOS ? 'ios' : 'android'}"><i data-lucide="${isIOS ? 'apple' : 'smartphone'}" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i>${app.platform || 'Android'}</span>${app.category ? `<span class="pill-category cat-src-${app.category_source||'store'}" title="Nguồn category: ${app.category_source==='override'?'Override tay':app.category_source==='ai'?'AI phân loại':app.category_source==='gitlab'?'Fallback subgroup':'Store category'}"><i data-lucide="tag"></i>${app.category}</span>` : ''}<span class="prod-ads-badge" data-prod-ads="loading" style="display:none"></span><span class="health-badge" data-health="loading" style="display:none"></span></div>
           <h2 class="app-title">${app.name}</h2><p class="app-desc">${app.description || ''}</p>
           <div class="btn-grid">${devUrl ? `<a href="${devUrl}" class="btn btn-dev"><i class="btn-ic" data-lucide="wrench"></i>${stack('Dev Build','dev')}</a>` : ""} ${prodUrl ? `<a href="${prodUrl}" class="btn btn-live"><i class="btn-ic" data-lucide="rocket"></i>${stack('Live Build','prod')}</a>` : ""} ${aabUrl ? `<a href="${aabUrl}" class="btn btn-full"><i class="btn-ic" data-lucide="package"></i>${stack('Download AAB','aab')}</a>` : ""} ${storeUrl ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="btn btn-store"><i class="btn-ic" data-lucide="shopping-bag"></i><span class="btn-stack">View on Store${app.store_version ? `<span class="ver" data-store-ver>${app.store_version}</span>` : `<span class="ver" data-store-ver style="display:none"></span>`}</span></a>` : ""}
-          <button type="button" class="btn btn-build" onclick="openBuildModal('${app.id}', '${(app.name || '').replace(/'/g, "\\'")}')"><i class="btn-ic" data-lucide="hammer"></i><span class="btn-stack">${buildLabel}</span></button>${noAdsTrigger}${noAdsDl}<button type="button" class="btn btn-gd" onclick="openViewDesc('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="file-text"></i><span class="btn-stack">Description</span></button><button type="button" class="btn btn-rn" onclick="openRelNotes('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="megaphone"></i><span class="btn-stack">Release Notes</span></button><button type="button" class="btn btn-as" onclick="dlAssets('${app.id}', '${(app.name || '').replace(/'/g, "\'")}', this)"><i class="btn-ic" data-lucide="download"></i><span class="btn-stack">Assets</span></button><button type="button" class="btn btn-ss" onclick="openShots('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="image"></i><span class="btn-stack">Screenshots</span></button><button type="button" class="btn btn-cfg" onclick="openConfig('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="settings-2"></i><span class="btn-stack">Kiểm tra cấu hình</span></button></div><div class="store-meta">${app.storeUpdated ? `<span class="store-upd"><span class="icon">📅</span>Updated on ${app.storeUpdated}</span>` : ""}</div>`;
+          <button type="button" class="btn btn-build" onclick="openBuildModal('${app.id}', '${(app.name || '').replace(/'/g, "\\'")}')"><i class="btn-ic" data-lucide="hammer"></i><span class="btn-stack">${buildLabel}</span></button>${noAdsTrigger}${noAdsDl}<button type="button" class="btn btn-gd" onclick="openViewDesc('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="file-text"></i><span class="btn-stack">Description</span></button><button type="button" class="btn btn-rn" onclick="openRelNotes('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="megaphone"></i><span class="btn-stack">Release Notes</span></button><button type="button" class="btn btn-as" onclick="dlAssets('${app.id}', '${(app.name || '').replace(/'/g, "\'")}', this)"><i class="btn-ic" data-lucide="download"></i><span class="btn-stack">Assets</span></button><button type="button" class="btn btn-ss" onclick="openShots('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="image"></i><span class="btn-stack">Screenshots</span></button><button type="button" class="btn btn-cfg" onclick="openConfig('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="settings-2"></i><span class="btn-stack">Kiểm tra cấu hình</span></button><button type="button" class="btn btn-rk" onclick="openReleaseKit('${app.id}', '${(app.name || '').replace(/'/g, "\'")}')"><i class="btn-ic" data-lucide="package-open"></i><span class="btn-stack">Gói phát hành</span></button></div><div class="store-meta">${app.storeUpdated ? `<span class="store-upd"><span class="icon">📅</span>Updated on ${app.storeUpdated}</span>` : ""}</div>`;
         container.appendChild(card);
       });
     };
@@ -903,7 +903,7 @@
       }
     }
     function close(){ov.classList.remove("open");pin.value="";msg.textContent="";}
-    btn.onclick=function(){ if(authed()){ localStorage.removeItem(KEY); localStorage.removeItem(TKEY); render(); window.runHealthCheck && window.runHealthCheck(); } else { ov.classList.add("open"); setTimeout(function(){pin.focus();},50); } };
+    btn.onclick=function(){ if(authed()){ localStorage.removeItem(KEY); localStorage.removeItem(TKEY); try{ sessionStorage.removeItem("aab_pin"); }catch(_){} render(); window.runHealthCheck && window.runHealthCheck(); } else { ov.classList.add("open"); setTimeout(function(){pin.focus();},50); } };
     cancel.onclick=close;
     ov.addEventListener("click",function(e){ if(e.target===ov) close(); });
     pin.addEventListener("keydown",function(e){ if(e.key==="Enter") ok.click(); });
@@ -916,6 +916,10 @@
         var d=await r.json();
         if(!r.ok||!d.ok) throw new Error(d.error||"Sai mã PIN");
         localStorage.setItem(KEY,"1"); localStorage.setItem(TKEY, d.tier||"build");
+        // RELEASE_KIT: giữ PIN trong sessionStorage (chỉ sống trong tab này, mất
+        // khi đóng tab / đăng xuất) để popup "Gói phát hành" gọi API mà không
+        // bắt partner gõ lại PIN mỗi lần mở.
+        try{ sessionStorage.setItem("aab_pin", v); }catch(_){}
         render(); close(); window.runHealthCheck && window.runHealthCheck();
       }catch(e){ msg.style.color="#ef4444"; msg.textContent="❌ "+e.message; }
       finally{ ok.disabled=false; }
@@ -1393,6 +1397,12 @@
     .btn-cfg{background:#0d9488;color:#fff;border:1px solid #0d9488;cursor:pointer;display:none!important}
     .btn-cfg:hover{background:#0f766e}
     body.aab-authed .btn-cfg{display:flex!important}
+    /* RELEASE_KIT — gói ảnh store + description để partner tự đẩy app lên Play.
+       Hiện cho MỌI user đã login (cả partner tier) — đây là thứ partner cần nhất. */
+    .btn-rk{background:#7c3aed;color:#fff;border:1px solid #7c3aed;cursor:pointer;display:none!important}
+    .btn-rk:hover{background:#6d28d9}
+    .btn-rk:disabled{opacity:.6;cursor:progress}
+    body.aab-authed .btn-rk{display:flex!important}
       /* NO_ADS_BUILD — nút phục vụ designer, chỉ hiện sau đăng nhập (như .btn-as) */
     .btn-noadsb{background:#d97706;color:#fff;border:1px solid #d97706;cursor:pointer;display:none!important}
     .btn-noadsb:hover{background:#b45309}
@@ -2411,6 +2421,138 @@
   mo.observe(document.body,{childList:true,subtree:true});
   document.addEventListener("DOMContentLoaded",function(){injectButtons(document);});
   injectButtons(document);
+})();</script>
+
+<style>/* RELEASE_KIT modal */
+  #rkOv{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;
+    align-items:center;justify-content:center;z-index:100003;padding:20px}
+  #rkOv.open{display:flex}
+  #rkMd{background:#fff;border-radius:20px;width:100%;max-width:860px;max-height:88vh;overflow:auto;
+    padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.35);font-family:inherit}
+  #rkMd h3{font-size:1.2rem;color:#0f172a;margin:0 0 2px}
+  #rkMd .rk-sub{font-size:.82rem;color:#64748b;font-weight:600;margin:0 0 16px}
+  .rk-sec{margin:18px 0 8px;font-size:.72rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+  .rk-shots{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+  .rk-shots img{height:230px;border-radius:10px;border:1px solid #e2e8f0;flex:0 0 auto;background:#f8fafc}
+  .rk-feat img{width:100%;max-width:420px;border-radius:10px;border:1px solid #e2e8f0}
+  .rk-icons{display:flex;gap:14px;align-items:center}
+  .rk-icons img{width:76px;height:76px;border-radius:16px;border:1px solid #e2e8f0}
+  .rk-desc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
+    font-size:.85rem;color:#0f172a;max-height:190px;overflow:auto;white-space:pre-wrap;line-height:1.5}
+  .rk-miss{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:10px 14px;
+    font-size:.84rem;font-weight:600;margin-top:12px}
+  .rk-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:10px 14px;
+    font-size:.84rem;font-weight:600;margin-top:12px}
+  .rk-meta{font-size:.78rem;color:#64748b;font-weight:600}
+  .rk-act{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .rk-act button{padding:13px 20px;border-radius:14px;font-weight:700;font-size:.9rem;border:none;
+    cursor:pointer;font-family:inherit}
+  .rk-dl{background:#7c3aed;color:#fff}
+  .rk-dl:disabled{opacity:.55;cursor:progress}
+  .rk-rf{background:#f1f5f9;color:#475569}
+  .rk-cl{background:#f1f5f9;color:#475569;margin-left:auto}
+  #rkSt{margin-top:12px;font-size:.85rem;font-weight:600;color:#64748b;min-height:18px}
+</style>
+<div id="rkOv"><div id="rkMd">
+  <h3 id="rkTitle">Gói phát hành</h3>
+  <p class="rk-sub" id="rkSub"></p>
+  <div id="rkBody"></div>
+  <div class="rk-act">
+    <button type="button" class="rk-dl" id="rkDl">Tải gói .zip</button>
+    <button type="button" class="rk-rf" id="rkRf" title="Export lại ảnh từ Figma (dùng khi vừa sửa Figma)">Cập nhật từ Figma</button>
+    <button type="button" class="rk-cl" id="rkCl">Đóng</button>
+  </div>
+  <div id="rkSt"></div>
+</div></div>
+<script>/* RELEASE_KIT — popup preview trước, tải zip sau (Sếp chốt 2026-07-28) */
+(function(){
+  var API="https://aab.tranquilmind.co";
+  var ov=document.getElementById("rkOv"), md=document.getElementById("rkMd"),
+      body=document.getElementById("rkBody"), st=document.getElementById("rkSt"),
+      title=document.getElementById("rkTitle"), sub=document.getElementById("rkSub"),
+      dl=document.getElementById("rkDl"), rf=document.getElementById("rkRf"), cl=document.getElementById("rkCl");
+  var cur={id:"",name:"",data:null};
+
+  function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
+  function mb(n){return (n/1048576).toFixed(1)+" MB";}
+  function close(){ov.classList.remove("open");st.textContent="";body.innerHTML="";}
+  cl.onclick=close;
+  ov.addEventListener("click",function(e){if(e.target===ov)close();});
+
+  // PIN: dùng lại PIN đã nhập lúc đăng nhập (lưu phiên), không bắt gõ lại.
+  function pin(){ return sessionStorage.getItem("aab_pin")||""; }
+
+  function render(d){
+    var h="";
+    if(d.warn) h+='<div class="rk-warn">⚠ '+esc(d.warn)+'</div>';
+    if(d.screenshots&&d.screenshots.length){
+      h+='<div class="rk-sec">Screenshot ('+d.screenshots.length+' ảnh '+d.screenshots[0].w+'×'+d.screenshots[0].h+')</div><div class="rk-shots">';
+      d.screenshots.forEach(function(s){h+='<img loading="lazy" src="'+esc(s.url)+'" alt="'+esc(s.name)+'">';});
+      h+='</div>';
+    }
+    if(d.feature){
+      h+='<div class="rk-sec">Feature graphic ('+d.feature.w+'×'+d.feature.h+')</div><div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div>';
+    }
+    if(d.icon){
+      h+='<div class="rk-sec">Icon</div><div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
+        +'<div class="rk-meta">'+esc(d.icon.name)+'<br>'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div>';
+    }
+    if(d.description){
+      h+='<div class="rk-sec">Description</div><div class="rk-desc">'
+        +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>';
+    }
+    if(d.aab){
+      h+='<div class="rk-sec">AAB (tải riêng, không nằm trong zip)</div>'
+        +'<div class="rk-meta"><a href="'+esc(d.aab.url)+'">'+esc(d.aab.name)+'</a> — '+mb(d.aab.size)+'</div>';
+    }
+    if(d.missing&&d.missing.length){
+      h+='<div class="rk-miss">Thiếu: '+d.missing.map(esc).join(" · ")+'</div>';
+    }
+    body.innerHTML=h;
+    var when=d.exported_at?new Date(d.exported_at).toLocaleString("vi-VN"):"";
+    sub.textContent=(d.cached?"Ảnh lấy từ bản export sẵn":"Vừa export mới từ Figma")+(when?" · "+when:"");
+    dl.disabled=!(d.screenshots&&d.screenshots.length)&&!d.icon&&!d.description;
+  }
+
+  async function load(refresh){
+    st.textContent=refresh?"Đang export lại từ Figma (có thể mất 30-60s)…":"Đang tải…";
+    body.innerHTML="";
+    try{
+      var r=await fetch(API+"/api/releasekit"+(refresh?"?refresh=1":""),{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({app_id:cur.id,pin:pin()})});
+      var d=await r.json();
+      if(!r.ok||!d.ok) throw new Error(d.error||("HTTP "+r.status));
+      cur.data=d; render(d); st.textContent="";
+    }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; }
+  }
+
+  window.openReleaseKit=function(id,name){
+    cur.id=id; cur.name=name; cur.data=null;
+    title.textContent="Gói phát hành — "+name;
+    sub.textContent=""; st.style.color="#64748b";
+    ov.classList.add("open");
+    load(false);
+  };
+
+  rf.onclick=function(){ load(true); };
+
+  dl.onclick=async function(){
+    dl.disabled=true; st.style.color="#64748b"; st.textContent="Đang đóng gói…";
+    try{
+      var r=await fetch(API+"/api/releasekit?download=1",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({app_id:cur.id,pin:pin()})});
+      if(!r.ok){ var er=await r.json().catch(function(){return{};}); throw new Error(er.error||("HTTP "+r.status)); }
+      var blob=await r.blob();
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download=cur.id+"_release_kit.zip";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+      st.textContent="✅ Đã tải "+(blob.size/1048576).toFixed(1)+" MB";
+    }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; }
+    finally{ dl.disabled=false; }
+  };
 })();</script>
 </body>
 </html>
