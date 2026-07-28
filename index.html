@@ -1405,7 +1405,7 @@
     .btn-rk{background:#7c3aed;color:#fff;border:1px solid #7c3aed;cursor:pointer;display:none!important}
     .btn-rk:hover{background:#6d28d9}
     .btn-rk:disabled{opacity:.6;cursor:progress}
-    body.aab-authed .btn-rk{display:flex!important}
+    body.aab-authed .btn-rk{display:flex!important;grid-column:span 2}
       /* NO_ADS_BUILD — nút phục vụ designer, chỉ hiện sau đăng nhập (như .btn-as) */
     .btn-noadsb{background:#d97706;color:#fff;border:1px solid #d97706;cursor:pointer;display:none!important}
     .btn-noadsb:hover{background:#b45309}
@@ -2519,8 +2519,12 @@
   }
 
   async function load(refresh){
-    st.textContent=refresh?"Đang export lại từ Figma (có thể mất 30-60s)…":"Đang tải…";
-    body.innerHTML="";
+    // Khoá nút tải khi chưa có dữ liệu — trước đây nút bật sẵn lúc đang tải nên
+    // bấm vào không biết đang tải cái gì (Sếp report 2026-07-28).
+    dl.disabled=true; rf.disabled=true;
+    st.style.color="#64748b";
+    st.textContent=refresh?"Đang export ảnh từ Figma (có thể mất 30-60s)…":"Đang tải dữ liệu gói…";
+    body.innerHTML='<div class="rk-sec">Đang tải…</div>';
     try{
       var r=await fetch(API+"/api/releasekit"+(refresh?"?refresh=1":""),{
         method:"POST",headers:{"Content-Type":"application/json"},
@@ -2528,7 +2532,8 @@
       var d=await r.json();
       if(!r.ok||!d.ok) throw new Error(d.error||("HTTP "+r.status));
       cur.data=d; render(d); st.textContent="";
-    }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; }
+    }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; body.innerHTML=""; }
+    finally{ rf.disabled=false; }
   }
 
   window.openReleaseKit=function(id,name){
