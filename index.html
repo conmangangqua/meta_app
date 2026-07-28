@@ -956,7 +956,9 @@
     .btn-gd{background:#7c3aed;color:#fff;border:1px solid #7c3aed;cursor:pointer;display:none!important}
     .btn-rn{background:#ea580c;color:#fff;border:1px solid #ea580c;cursor:pointer;display:none!important}
     .btn-rn:hover{background:#c2410c}
-    body.aab-authed .btn-rn{display:flex!important}
+    /* Sếp 2026-07-28: partner tier CHỈ thấy "Gói phát hành" — Release Notes là
+       việc nội bộ, ẩn khỏi partner (build tier/admin vẫn thấy). */
+    body.aab-authed:not(.partner-authed) .btn-rn{display:flex!important}
     #rnMd input{width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;font-weight:600;outline:none;margin-top:16px}
     #rnMd input:focus{border-color:#ea580c}
     #rnAct{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:16px}
@@ -1393,10 +1395,11 @@
     .btn-fl{background:#5b21b6;color:#fff;border:1px solid #5b21b6;cursor:pointer;display:none!important}
     .btn-fl:hover{background:#4c1d95}
     body.aab-authed:not(.partner-authed) .btn-fl{display:flex!important}
-    /* Kiểm tra cấu hình + SDK — hiện cho MỌI user đã login (build PIN 05082024 + partner). */
+    /* Kiểm tra cấu hình + SDK — CHỈ build tier/admin. Sếp 2026-07-28: ẩn khỏi
+       partner tier, partner chỉ cần "Gói phát hành". */
     .btn-cfg{background:#0d9488;color:#fff;border:1px solid #0d9488;cursor:pointer;display:none!important}
     .btn-cfg:hover{background:#0f766e}
-    body.aab-authed .btn-cfg{display:flex!important}
+    body.aab-authed:not(.partner-authed) .btn-cfg{display:flex!important}
     /* RELEASE_KIT — gói ảnh store + description để partner tự đẩy app lên Play.
        Hiện cho MỌI user đã login (cả partner tier) — đây là thứ partner cần nhất. */
     .btn-rk{background:#7c3aed;color:#fff;border:1px solid #7c3aed;cursor:pointer;display:none!important}
@@ -2280,7 +2283,8 @@
   })();</script>
 <!-- data-safety-widget --><style>
   .btn-ds{background:#059669;color:#fff;border:1px solid #059669;cursor:pointer;display:none!important}
-  body.aab-authed .btn-ds{display:flex!important}
+  /* Sếp 2026-07-28: Data Safety là việc nội bộ → ẩn khỏi partner tier. */
+  body.aab-authed:not(.partner-authed) .btn-ds{display:flex!important}
   #dsMdOv{position:fixed;inset:0;background:rgba(2,6,23,.62);backdrop-filter:blur(4px);z-index:10000;display:none;align-items:center;justify-content:center;padding:18px}
   #dsMdOv.open{display:flex}
   #dsMd{background:#fff;border-radius:22px;padding:26px 26px 22px;width:100%;max-width:860px;max-height:92vh;overflow:auto;box-shadow:0 40px 100px rgba(0,0,0,.35);font-family:system-ui,-apple-system,sans-serif;color:#0f172a}
