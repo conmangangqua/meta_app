@@ -2441,6 +2441,13 @@
   .rk-feat img{width:100%;max-width:420px;border-radius:10px;border:1px solid #e2e8f0}
   .rk-icons{display:flex;gap:14px;align-items:center}
   .rk-icons img{width:76px;height:76px;border-radius:16px;border:1px solid #e2e8f0}
+  /* Tải lẻ từng file (Sếp 2026-07-28) */
+  .rk-item{position:relative;flex:0 0 auto;display:flex;flex-direction:column;gap:6px;align-items:center}
+  .rk-one{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;border-radius:9px;padding:6px 12px;
+    font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .rk-one:hover{background:#ddd6fe}
+  .rk-one:disabled{opacity:.5;cursor:progress}
+  .rk-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
   .rk-desc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
     font-size:.85rem;color:#0f172a;max-height:190px;overflow:auto;white-space:pre-wrap;line-height:1.5}
   .rk-miss{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:10px 14px;
@@ -2462,7 +2469,7 @@
   <p class="rk-sub" id="rkSub"></p>
   <div id="rkBody"></div>
   <div class="rk-act">
-    <button type="button" class="rk-dl" id="rkDl">Tải gói .zip</button>
+    <button type="button" class="rk-dl" id="rkDl">Tải tất cả (.zip)</button>
     <button type="button" class="rk-rf" id="rkRf" title="Export lại ảnh từ Figma (dùng khi vừa sửa Figma)">Cập nhật từ Figma</button>
     <button type="button" class="rk-cl" id="rkCl">Đóng</button>
   </div>
@@ -2491,19 +2498,27 @@
     if(d.warn) h+='<div class="rk-warn">⚠ '+esc(d.warn)+'</div>';
     if(d.screenshots&&d.screenshots.length){
       h+='<div class="rk-sec">Screenshot ('+d.screenshots.length+' ảnh '+d.screenshots[0].w+'×'+d.screenshots[0].h+')</div><div class="rk-shots">';
-      d.screenshots.forEach(function(s){h+='<img loading="lazy" src="'+esc(s.url)+'" alt="'+esc(s.name)+'">';});
+      d.screenshots.forEach(function(s,i){
+        h+='<div class="rk-item"><img loading="lazy" src="'+esc(s.url)+'" alt="'+esc(s.name)+'">'
+          +'<button type="button" class="rk-one" data-file="screenshot" data-i="'+(i+1)+'">⬇ Ảnh '+(i+1)+'</button></div>';
+      });
       h+='</div>';
     }
     if(d.feature){
-      h+='<div class="rk-sec">Feature graphic ('+d.feature.w+'×'+d.feature.h+')</div><div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div>';
+      h+='<div class="rk-sec">Feature graphic ('+d.feature.w+'×'+d.feature.h+')</div><div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div>'
+        +'<div class="rk-row"><button type="button" class="rk-one" data-file="feature">⬇ Tải feature graphic</button></div>';
     }
     if(d.icon){
       h+='<div class="rk-sec">Icon</div><div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
-        +'<div class="rk-meta">'+esc(d.icon.name)+'<br>'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div>';
+        +'<div class="rk-meta">'+esc(d.icon.name)+'<br>'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div>'
+        +'<div class="rk-row"><button type="button" class="rk-one" data-file="icon512">⬇ Icon 512×512 (dùng cho Play)</button>'
+        +'<button type="button" class="rk-one" data-file="icon">⬇ Icon gốc</button></div>';
     }
     if(d.description){
       h+='<div class="rk-sec">Description</div><div class="rk-desc">'
-        +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>';
+        +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>'
+        +'<div class="rk-row"><button type="button" class="rk-one" data-file="description">⬇ Tải description.txt</button>'
+        +'<button type="button" class="rk-one" id="rkCopy">📋 Copy mô tả dài</button></div>';
     }
     if(d.aab){
       h+='<div class="rk-sec">AAB (tải riêng, không nằm trong zip)</div>'
@@ -2513,9 +2528,46 @@
       h+='<div class="rk-miss">Thiếu: '+d.missing.map(esc).join(" · ")+'</div>';
     }
     body.innerHTML=h;
+    // Gắn handler tải lẻ cho mọi nút vừa render.
+    body.querySelectorAll(".rk-one[data-file]").forEach(function(btn){
+      btn.onclick=function(){ grabOne(btn, btn.dataset.file, btn.dataset.i||""); };
+    });
+    var cp=body.querySelector("#rkCopy");
+    if(cp) cp.onclick=function(){
+      var t=(d.description&&d.description.long)||"";
+      navigator.clipboard.writeText(t).then(function(){
+        cp.textContent="✅ Đã copy"; setTimeout(function(){cp.textContent="📋 Copy mô tả dài";},1800);
+      });
+    };
     var when=d.exported_at?new Date(d.exported_at).toLocaleString("vi-VN"):"";
     sub.textContent=(d.cached?"Ảnh lấy từ bản export sẵn":"Vừa export mới từ Figma")+(when?" · "+when:"");
     dl.disabled=!(d.screenshots&&d.screenshots.length)&&!d.icon&&!d.description;
+  }
+
+  // Tải 1 file lẻ. Phải đi qua API (POST + PIN) chứ không dùng <a download>:
+  // icon 512 và description.txt được sinh phía server, còn link GitHub là
+  // cross-origin nên thuộc tính download bị trình duyệt bỏ qua.
+  async function grabOne(btn, file, i){
+    var old=btn.textContent;
+    btn.disabled=true; btn.textContent="⏳ Đang tải…";
+    st.style.color="#64748b"; st.textContent="";
+    try{
+      var q="?file="+encodeURIComponent(file)+(i?"&i="+encodeURIComponent(i):"");
+      var r=await fetch(API+"/api/releasekit"+q,{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({app_id:cur.id,pin:pin()})});
+      if(!r.ok){ var er=await r.json().catch(function(){return{};}); throw new Error(er.error||("HTTP "+r.status)); }
+      var cd=r.headers.get("content-disposition")||"";
+      var m=cd.match(/filename="([^"]+)"/);
+      var blob=await r.blob();
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download=m?m[1]:(cur.id+"_"+file);
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+      btn.textContent="✅ Đã tải";
+      setTimeout(function(){btn.textContent=old;},1800);
+    }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; btn.textContent=old; }
+    finally{ btn.disabled=false; }
   }
 
   async function load(refresh){
