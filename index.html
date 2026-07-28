@@ -2514,6 +2514,20 @@
         +'<div class="rk-row"><button type="button" class="rk-one" data-file="icon512">⬇ Icon 512×512 (dùng cho Play)</button>'
         +'<button type="button" class="rk-one" data-file="icon">⬇ Icon gốc</button></div>';
     }
+    if(d.listing_en||d.data_safety){
+      h+='<div class="rk-sec">Hồ sơ khai báo Play Console</div><div class="rk-row">';
+      if(d.listing_en) h+='<button type="button" class="rk-one" data-file="listing_en">⬇ Listing EN (.md)</button>';
+      if(d.listing_vi) h+='<button type="button" class="rk-one" data-file="listing_vi">⬇ Listing VI (.md)</button>';
+      if(d.data_safety) h+='<button type="button" class="rk-one" data-file="data_safety">⬇ Data safety (.csv)</button>';
+      h+='</div>';
+      if(d.data_safety) h+='<div class="rk-warn">Sau khi import CSV, Console còn hỏi <b>"Can users login with accounts created outside of the app?"</b> → tick <b>No</b>, rồi bấm tiếp và lưu lại.</div>';
+      if(d.privacy_url||d.terms_url){
+        h+='<div class="rk-row rk-meta">';
+        if(d.privacy_url) h+='<span>Privacy: <a href="'+esc(d.privacy_url)+'" target="_blank" rel="noopener">'+esc(d.privacy_url)+'</a></span>';
+        if(d.terms_url) h+='<span>Terms: <a href="'+esc(d.terms_url)+'" target="_blank" rel="noopener">'+esc(d.terms_url)+'</a></span>';
+        h+='</div>';
+      }
+    }
     if(d.description){
       h+='<div class="rk-sec">Description</div><div class="rk-desc">'
         +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>'
