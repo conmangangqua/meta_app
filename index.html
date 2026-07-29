@@ -2602,8 +2602,10 @@
         +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>';
     }
     if(d.aab){
-      h+='<div class="rk-sec">AAB (tải riêng, không nằm trong zip)</div>'
-        +'<div class="rk-meta"><a href="'+esc(d.aab.url)+'">'+esc(d.aab.name)+'</a> — '+mb(d.aab.size)+'</div>';
+      // Nút tải thẳng từ GitHub release (repo hub public) — không qua API vì file
+      // 100-140MB. Ghi chú 'không nằm trong zip' đã bỏ cùng lúc bỏ tính năng zip.
+      h+=secRow('AAB', [], '<a class="rk-one rk-link" href="'+esc(d.aab.url)+'">⬇ Tải AAB</a>')
+        +'<div class="rk-url">'+esc(d.aab.name)+' — '+mb(d.aab.size)+'</div>';
     }
     if(d.missing&&d.missing.length){
       h+='<div class="rk-miss">Thiếu: '+d.missing.map(esc).join(" · ")+'</div>';
