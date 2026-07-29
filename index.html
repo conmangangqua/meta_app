@@ -2456,6 +2456,9 @@
   .rk-tab{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:9px;
     padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit}
   .rk-tab.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+  .rk-url{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:9px 12px;
+    font:600 .8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#334155;word-break:break-all}
+  a.rk-link{text-decoration:none;display:inline-flex;align-items:center}
   .rk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .rk-chip{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;border-radius:999px;
     padding:4px 10px;font-size:.75rem;font-weight:700}
@@ -2497,6 +2500,24 @@
       title=document.getElementById("rkTitle"), sub=document.getElementById("rkSub"),
       rf=document.getElementById("rkRf"), cl=document.getElementById("rkCl");
   var cur={id:"",name:"",data:null};
+
+  // Copy có fallback: navigator.clipboard chỉ chạy ở secure context + cần quyền;
+  // nếu bị từ chối thì dùng textarea + execCommand để không im lặng thất bại.
+  function copyText(t){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(t).then(function(){return true;}).catch(function(){return legacyCopy(t);});
+    }
+    return Promise.resolve(legacyCopy(t));
+  }
+  function legacyCopy(t){
+    try{
+      var ta=document.createElement("textarea");
+      ta.value=t; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select();
+      var ok=document.execCommand("copy");
+      ta.remove(); return ok;
+    }catch(e){ return false; }
+  }
 
   function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
   function mb(n){return (n/1048576).toFixed(1)+" MB";}
@@ -2565,13 +2586,16 @@
         h+='</div>';
       }
       if(d.data_safety) h+='<div class="rk-warn">Sau khi import CSV, Console còn hỏi <b>"Can users login with accounts created outside of the app?"</b> → tick <b>No</b>, rồi bấm tiếp và lưu lại.</div>';
-      if(d.privacy_url||d.terms_url){
-        h+='<div class="rk-row rk-meta">';
-        if(d.privacy_url) h+='<span>Privacy: <a href="'+esc(d.privacy_url)+'" target="_blank" rel="noopener">'+esc(d.privacy_url)+'</a></span>';
-        if(d.terms_url) h+='<span>Terms: <a href="'+esc(d.terms_url)+'" target="_blank" rel="noopener">'+esc(d.terms_url)+'</a></span>';
-        h+='</div>';
-      }
     }
+    // Sếp 2026-07-29: Privacy / Terms tách thành 2 mục riêng, mỗi mục có nút
+    // copy link (partner phải dán URL này vào Play Console nên copy là thao tác chính).
+    [['Privacy Policy', d.privacy_url], ['Terms of Service', d.terms_url]].forEach(function(pair){
+      if(!pair[1]) return;
+      h+=secRow(pair[0], [],
+          '<button type="button" class="rk-one" data-copy="'+esc(pair[1])+'">📋 Copy link</button>'
+        + '<a class="rk-one rk-link" href="'+esc(pair[1])+'" target="_blank" rel="noopener">🔗 Mở</a>')
+        +'<div class="rk-url">'+esc(pair[1])+'</div>';
+    });
     if(d.description){
       h+=secRow('Description', [{f:'description',t:'⬇ Tải .txt'}], '<button type="button" class="rk-one" id="rkCopy">📋 Copy mô tả</button>')
         +'<div class="rk-desc">'
@@ -2588,6 +2612,15 @@
     // Gắn handler tải lẻ cho mọi nút vừa render.
     body.querySelectorAll(".rk-one[data-file]").forEach(function(btn){
       btn.onclick=function(){ grabOne(btn, btn.dataset.file, btn.dataset.i||""); };
+    });
+    body.querySelectorAll("[data-copy]").forEach(function(b){
+      b.onclick=function(){
+        var old=b.textContent;
+        copyText(b.dataset.copy).then(function(ok){
+          b.textContent = ok ? "✅ Đã copy" : "❌ Copy lỗi";
+          setTimeout(function(){ b.textContent=old; },1600);
+        });
+      };
     });
     body.querySelectorAll(".rk-tab[data-doc]").forEach(function(t){
       t.onclick=function(){
@@ -2612,8 +2645,9 @@
     var cp=body.querySelector("#rkCopy");
     if(cp) cp.onclick=function(){
       var t=(d.description&&d.description.long)||"";
-      navigator.clipboard.writeText(t).then(function(){
-        cp.textContent="✅ Đã copy"; setTimeout(function(){cp.textContent="📋 Copy mô tả dài";},1800);
+      copyText(t).then(function(ok){
+        cp.textContent = ok ? "✅ Đã copy" : "❌ Copy lỗi";
+        setTimeout(function(){cp.textContent="📋 Copy mô tả dài";},1800);
       });
     };
     var when=d.exported_at?new Date(d.exported_at).toLocaleString("vi-VN"):"";
