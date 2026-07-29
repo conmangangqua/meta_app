@@ -2440,7 +2440,7 @@
   .rk-top .rk-sec-row{margin-top:0}
   @media(max-width:620px){.rk-top{flex-direction:column}.rk-top-feat{width:100%}}
   .rk-icons{display:flex;gap:14px;align-items:center}
-  .rk-icons img{width:76px;height:76px;border-radius:16px;border:1px solid #e2e8f0}
+  .rk-icons img{width:170px;height:170px;border-radius:30px;border:1px solid #e2e8f0}
   /* Tải lẻ từng file (Sếp 2026-07-28) */
   .rk-item{position:relative;flex:0 0 auto;display:flex;flex-direction:column;gap:6px;align-items:center}
   .rk-one{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;border-radius:9px;padding:6px 12px;
@@ -2547,9 +2547,8 @@
       h+='<div class="rk-top">';
       if(d.icon){
         h+='<div class="rk-top-icon">'
-          +secRow('Icon', [{f:'icon512',t:'⬇ 512'},{f:'icon',t:'⬇ Gốc'}])
-          +'<div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
-          +'<div class="rk-meta">'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div></div>';
+          +secRow('Icon', [{f:'icon512',t:'⬇ Tải icon 512×512'}])
+          +'<div class="rk-icons"><img src="'+esc(d.icon.url)+'"></div></div>';
       }
       if(d.feature){
         h+='<div class="rk-top-feat">'
