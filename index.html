@@ -2424,8 +2424,14 @@
   #rkMd h3{font-size:1.2rem;color:#0f172a;margin:0 0 2px}
   #rkMd .rk-sub{font-size:.82rem;color:#64748b;font-weight:600;margin:0 0 16px}
   .rk-sec{margin:18px 0 8px;font-size:.72rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
-  .rk-shots{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
-  .rk-shots img{height:230px;border-radius:10px;border:1px solid #e2e8f0;flex:0 0 auto;background:#f8fafc}
+  /* Sếp 2026-07-29: 3 ảnh/hàng thay vì cuộn ngang — nhìn được cả bộ mà không phải kéo. */
+  .rk-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .rk-shots img{width:100%;height:auto;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc}
+  @media(max-width:560px){.rk-shots{grid-template-columns:repeat(2,1fr)}}
+  /* Hàng tiêu đề: chữ bên trái, nút tải cả bộ bên phải. */
+  .rk-sec-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 8px}
+  .rk-sec-row .rk-sec{margin:0}
+  .rk-sec-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
   .rk-feat img{width:100%;max-width:420px;border-radius:10px;border:1px solid #e2e8f0}
   .rk-icons{display:flex;gap:14px;align-items:center}
   .rk-icons img{width:76px;height:76px;border-radius:16px;border:1px solid #e2e8f0}
@@ -2484,33 +2490,43 @@
   // PIN: dùng lại PIN đã nhập lúc đăng nhập (lưu phiên), không bắt gõ lại.
   function pin(){ return sessionStorage.getItem("aab_pin")||""; }
 
+  // Hàng tiêu đề mục: chữ trái, nút phải — gom nút cạnh title cho đỡ tốn chỗ
+  // (Sếp 2026-07-29), thay vì mỗi mục một hàng nút riêng bên dưới.
+  function secRow(title, btns, extraHtml){
+    var h='<div class="rk-sec-row"><div class="rk-sec">'+esc(title)+'</div><div class="rk-sec-btns">';
+    (btns||[]).forEach(function(b){
+      h+='<button type="button" class="rk-one" data-file="'+b.f+'">'+b.t+'</button>';
+    });
+    h+=(extraHtml||'')+'</div></div>';
+    return h;
+  }
+
   function render(d){
     var h="";
-    if(d.warn) h+='<div class="rk-warn">⚠ '+esc(d.warn)+'</div>';
     if(d.screenshots&&d.screenshots.length){
-      h+='<div class="rk-sec">Screenshot ('+d.screenshots.length+' ảnh '+d.screenshots[0].w+'×'+d.screenshots[0].h+')</div><div class="rk-shots">';
-      d.screenshots.forEach(function(s,i){
-        h+='<div class="rk-item"><img loading="lazy" src="'+esc(s.url)+'" alt="'+esc(s.name)+'">'
-          +'<button type="button" class="rk-one" data-file="screenshot" data-i="'+(i+1)+'">⬇ Ảnh '+(i+1)+'</button></div>';
+      h+='<div class="rk-sec-row"><div class="rk-sec">Screenshot ('+d.screenshots.length+' ảnh '+d.screenshots[0].w+'×'+d.screenshots[0].h+')</div>'
+        +'<button type="button" class="rk-one" id="rkAllShots">⬇ Tải '+d.screenshots.length+' ảnh</button></div><div class="rk-shots">';
+      d.screenshots.forEach(function(s){
+        h+='<img loading="lazy" src="'+esc(s.url)+'" alt="'+esc(s.name)+'">';
       });
       h+='</div>';
     }
     if(d.feature){
-      h+='<div class="rk-sec">Feature graphic ('+d.feature.w+'×'+d.feature.h+')</div><div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div>'
-        +'<div class="rk-row"><button type="button" class="rk-one" data-file="feature">⬇ Tải feature graphic</button></div>';
+      h+=secRow('Feature graphic ('+d.feature.w+'×'+d.feature.h+')',
+                [{f:'feature',t:'⬇ Tải'}])
+        +'<div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div>';
     }
     if(d.icon){
-      h+='<div class="rk-sec">Icon</div><div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
-        +'<div class="rk-meta">'+esc(d.icon.name)+'<br>'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div>'
-        +'<div class="rk-row"><button type="button" class="rk-one" data-file="icon512">⬇ Icon 512×512 (dùng cho Play)</button>'
-        +'<button type="button" class="rk-one" data-file="icon">⬇ Icon gốc</button></div>';
+      h+=secRow('Icon', [{f:'icon512',t:'⬇ 512×512 (cho Play)'},{f:'icon',t:'⬇ Bản gốc'}])
+        +'<div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
+        +'<div class="rk-meta">'+esc(d.icon.name)+'<br>'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div>';
     }
     if(d.listing_en||d.data_safety){
-      h+='<div class="rk-sec">Hồ sơ khai báo Play Console</div><div class="rk-row">';
-      if(d.listing_en) h+='<button type="button" class="rk-one" data-file="listing_en">⬇ Listing EN (.md)</button>';
-      if(d.listing_vi) h+='<button type="button" class="rk-one" data-file="listing_vi">⬇ Listing VI (.md)</button>';
-      if(d.data_safety) h+='<button type="button" class="rk-one" data-file="data_safety">⬇ Data safety (.csv)</button>';
-      h+='</div>';
+      var hs=[];
+      if(d.listing_en) hs.push({f:'listing_en',t:'⬇ Listing EN'});
+      if(d.listing_vi) hs.push({f:'listing_vi',t:'⬇ Listing VI'});
+      if(d.data_safety) hs.push({f:'data_safety',t:'⬇ Data safety (.csv)'});
+      h+=secRow('Hồ sơ khai báo Play Console', hs);
       if(d.data_safety) h+='<div class="rk-warn">Sau khi import CSV, Console còn hỏi <b>"Can users login with accounts created outside of the app?"</b> → tick <b>No</b>, rồi bấm tiếp và lưu lại.</div>';
       if(d.privacy_url||d.terms_url){
         h+='<div class="rk-row rk-meta">';
@@ -2520,10 +2536,9 @@
       }
     }
     if(d.description){
-      h+='<div class="rk-sec">Description</div><div class="rk-desc">'
-        +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>'
-        +'<div class="rk-row"><button type="button" class="rk-one" data-file="description">⬇ Tải description.txt</button>'
-        +'<button type="button" class="rk-one" id="rkCopy">📋 Copy mô tả dài</button></div>';
+      h+=secRow('Description', [{f:'description',t:'⬇ Tải .txt'}], '<button type="button" class="rk-one" id="rkCopy">📋 Copy mô tả</button>')
+        +'<div class="rk-desc">'
+        +esc(d.description.app_name)+'\n\n'+esc(d.description.short)+'\n\n'+esc(d.description.long)+'</div>';
     }
     if(d.aab){
       h+='<div class="rk-sec">AAB (tải riêng, không nằm trong zip)</div>'
@@ -2537,6 +2552,17 @@
     body.querySelectorAll(".rk-one[data-file]").forEach(function(btn){
       btn.onclick=function(){ grabOne(btn, btn.dataset.file, btn.dataset.i||""); };
     });
+    var all=body.querySelector("#rkAllShots");
+    if(all) all.onclick=async function(){
+      var n=(d.screenshots||[]).length, old=all.textContent;
+      all.disabled=true;
+      for(var i=1;i<=n;i++){
+        all.textContent="⏳ "+i+"/"+n;
+        try{ await grabFile("screenshot", i); }catch(e){ /* lỗi từng ảnh đã báo ở st */ }
+      }
+      all.textContent="✅ Đã tải "+n+" ảnh";
+      setTimeout(function(){ all.textContent=old; all.disabled=false; },2000);
+    };
     var cp=body.querySelector("#rkCopy");
     if(cp) cp.onclick=function(){
       var t=(d.description&&d.description.long)||"";
@@ -2551,23 +2577,26 @@
   // Tải 1 file lẻ. Phải đi qua API (POST + PIN) chứ không dùng <a download>:
   // icon 512 và description.txt được sinh phía server, còn link GitHub là
   // cross-origin nên thuộc tính download bị trình duyệt bỏ qua.
+  // Tải 1 file về máy (dùng chung cho nút lẻ và nút "Tải N ảnh").
+  async function grabFile(file, i){
+    var q="?file="+encodeURIComponent(file)+(i?"&i="+encodeURIComponent(i):"");
+    var r=await fetch(API+"/api/releasekit"+q,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({app_id:cur.id,pin:pin()})});
+    if(!r.ok){ var er=await r.json().catch(function(){return{};}); throw new Error(er.error||("HTTP "+r.status)); }
+    var cd=r.headers.get("content-disposition")||"", m=cd.match(/filename="([^"]+)"/);
+    var blob=await r.blob(), a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=m?m[1]:(cur.id+"_"+file);
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+  }
+
   async function grabOne(btn, file, i){
     var old=btn.textContent;
     btn.disabled=true; btn.textContent="⏳ Đang tải…";
     st.style.color="#64748b"; st.textContent="";
     try{
-      var q="?file="+encodeURIComponent(file)+(i?"&i="+encodeURIComponent(i):"");
-      var r=await fetch(API+"/api/releasekit"+q,{
-        method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({app_id:cur.id,pin:pin()})});
-      if(!r.ok){ var er=await r.json().catch(function(){return{};}); throw new Error(er.error||("HTTP "+r.status)); }
-      var cd=r.headers.get("content-disposition")||"";
-      var m=cd.match(/filename="([^"]+)"/);
-      var blob=await r.blob();
-      var a=document.createElement("a");
-      a.href=URL.createObjectURL(blob); a.download=m?m[1]:(cur.id+"_"+file);
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+      await grabFile(file, i);
       btn.textContent="✅ Đã tải";
       setTimeout(function(){btn.textContent=old;},1800);
     }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; btn.textContent=old; }
