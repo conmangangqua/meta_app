@@ -2443,13 +2443,17 @@
   .rk-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:10px 14px;
     font-size:.84rem;font-weight:600;margin-top:12px}
   .rk-meta{font-size:.78rem;color:#64748b;font-weight:600}
-  .rk-act{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
-  .rk-act button{padding:13px 20px;border-radius:14px;font-weight:700;font-size:.9rem;border:none;
-    cursor:pointer;font-family:inherit}
-  .rk-dl{background:#7c3aed;color:#fff}
-  .rk-dl:disabled{opacity:.55;cursor:progress}
-  .rk-rf{background:#f1f5f9;color:#475569}
-  .rk-cl{background:#f1f5f9;color:#475569;margin-left:auto}
+  /* Theo CHUẨN HOÁ MODAL ACTIONS 2026-07-28 (giống #rnAct/#aablAct/#stAct):
+     nút chính đồng cỡ flex:1 1 0, nút Đóng cố định cỡ + order:9 xếp cuối.
+     Trước đây dùng margin-left:auto nên lệch chuẩn so với các popup khác. */
+  .rk-act{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+  .rk-act button{flex:1 1 0;min-width:140px;padding:12px;border-radius:12px;font-weight:700;
+    font-size:.9rem;border:none;cursor:pointer;font-family:inherit;box-sizing:border-box;line-height:1.2}
+  .rk-rf{background:#7c3aed;color:#fff}
+  .rk-rf:disabled{opacity:.55;cursor:progress}
+  /* Phải là `.rk-act button.rk-cl` chứ không phải `.rk-cl`: `.rk-act button` có
+     specificity cao hơn nên sẽ đè mất flex:0 0 auto → nút Đóng phình bằng nút chính. */
+  .rk-act button.rk-cl{flex:0 0 auto;min-width:96px;order:9;background:#f1f5f9;color:#475569;border:1.5px solid #e2e8f0}
   #rkSt{margin-top:12px;font-size:.85rem;font-weight:600;color:#64748b;min-height:18px}
 </style>
 <div id="rkOv"><div id="rkMd">
@@ -2457,7 +2461,6 @@
   <p class="rk-sub" id="rkSub"></p>
   <div id="rkBody"></div>
   <div class="rk-act">
-    <button type="button" class="rk-dl" id="rkDl">Tải tất cả (.zip)</button>
     <button type="button" class="rk-rf" id="rkRf" title="Export lại ảnh từ Figma (dùng khi vừa sửa Figma)">Cập nhật từ Figma</button>
     <button type="button" class="rk-cl" id="rkCl">Đóng</button>
   </div>
@@ -2469,7 +2472,7 @@
   var ov=document.getElementById("rkOv"), md=document.getElementById("rkMd"),
       body=document.getElementById("rkBody"), st=document.getElementById("rkSt"),
       title=document.getElementById("rkTitle"), sub=document.getElementById("rkSub"),
-      dl=document.getElementById("rkDl"), rf=document.getElementById("rkRf"), cl=document.getElementById("rkCl");
+      rf=document.getElementById("rkRf"), cl=document.getElementById("rkCl");
   var cur={id:"",name:"",data:null};
 
   function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
@@ -2543,7 +2546,6 @@
     };
     var when=d.exported_at?new Date(d.exported_at).toLocaleString("vi-VN"):"";
     sub.textContent=(d.cached?"Ảnh lấy từ bản export sẵn":"Vừa export mới từ Figma")+(when?" · "+when:"");
-    dl.disabled=!(d.screenshots&&d.screenshots.length)&&!d.icon&&!d.description;
   }
 
   // Tải 1 file lẻ. Phải đi qua API (POST + PIN) chứ không dùng <a download>:
@@ -2575,7 +2577,7 @@
   async function load(refresh){
     // Khoá nút tải khi chưa có dữ liệu — trước đây nút bật sẵn lúc đang tải nên
     // bấm vào không biết đang tải cái gì (Sếp report 2026-07-28).
-    dl.disabled=true; rf.disabled=true;
+    rf.disabled=true;
     st.style.color="#64748b";
     st.textContent=refresh?"Đang export ảnh từ Figma (có thể mất 30-60s)…":"Đang tải dữ liệu gói…";
     body.innerHTML='<div class="rk-sec">Đang tải…</div>';
@@ -2600,22 +2602,6 @@
 
   rf.onclick=function(){ load(true); };
 
-  dl.onclick=async function(){
-    dl.disabled=true; st.style.color="#64748b"; st.textContent="Đang đóng gói…";
-    try{
-      var r=await fetch(API+"/api/releasekit?download=1",{
-        method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({app_id:cur.id,pin:pin()})});
-      if(!r.ok){ var er=await r.json().catch(function(){return{};}); throw new Error(er.error||("HTTP "+r.status)); }
-      var blob=await r.blob();
-      var a=document.createElement("a");
-      a.href=URL.createObjectURL(blob); a.download=cur.id+"_release_kit.zip";
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
-      st.textContent="✅ Đã tải "+(blob.size/1048576).toFixed(1)+" MB";
-    }catch(e){ st.style.color="#ef4444"; st.textContent="❌ "+e.message; }
-    finally{ dl.disabled=false; }
-  };
 })();</script>
 </body>
 </html>
