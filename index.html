@@ -2448,6 +2448,17 @@
   .rk-one:hover{background:#ddd6fe}
   .rk-one:disabled{opacity:.5;cursor:progress}
   .rk-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+  /* Hộp xem trước listing (.md) — cùng tông với .rk-desc, cao hơn vì tài liệu dài. */
+  .rk-doc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
+    font:500 .78rem/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#0f172a;
+    max-height:320px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+  .rk-tabs{display:flex;gap:6px}
+  .rk-tab{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:9px;
+    padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .rk-tab.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+  .rk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .rk-chip{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;border-radius:999px;
+    padding:4px 10px;font-size:.75rem;font-weight:700}
   .rk-desc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
     font-size:.85rem;color:#0f172a;max-height:190px;overflow:auto;white-space:pre-wrap;line-height:1.5}
   .rk-miss{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:10px 14px;
@@ -2539,7 +2550,20 @@
       if(d.listing_en) hs.push({f:'listing_en',t:'⬇ Listing EN'});
       if(d.listing_vi) hs.push({f:'listing_vi',t:'⬇ Listing VI'});
       if(d.data_safety) hs.push({f:'data_safety',t:'⬇ Data safety (.csv)'});
-      h+=secRow('Hồ sơ khai báo Play Console', hs);
+      var tabs='';
+      if(d.listing_en&&d.listing_en.text) tabs+='<button type="button" class="rk-tab on" data-doc="en">EN</button>';
+      if(d.listing_vi&&d.listing_vi.text) tabs+='<button type="button" class="rk-tab'+(d.listing_en&&d.listing_en.text?'':' on')+'" data-doc="vi">VI</button>';
+      h+=secRow('Hồ sơ khai báo Play Console', hs, tabs?'<div class="rk-tabs">'+tabs+'</div>':'');
+      // Xem trước nội dung listing ngay tại chỗ (Sếp 2026-07-29).
+      if((d.listing_en&&d.listing_en.text)||(d.listing_vi&&d.listing_vi.text)){
+        var first=(d.listing_en&&d.listing_en.text)?d.listing_en.text:d.listing_vi.text;
+        h+='<div class="rk-doc" id="rkDoc">'+esc(first)+'</div>';
+      }
+      if(d.data_safety&&d.data_safety.types&&d.data_safety.types.length){
+        h+='<div class="rk-chips">';
+        d.data_safety.types.forEach(function(t){ h+='<span class="rk-chip">'+esc(t)+'</span>'; });
+        h+='</div>';
+      }
       if(d.data_safety) h+='<div class="rk-warn">Sau khi import CSV, Console còn hỏi <b>"Can users login with accounts created outside of the app?"</b> → tick <b>No</b>, rồi bấm tiếp và lưu lại.</div>';
       if(d.privacy_url||d.terms_url){
         h+='<div class="rk-row rk-meta">';
@@ -2564,6 +2588,15 @@
     // Gắn handler tải lẻ cho mọi nút vừa render.
     body.querySelectorAll(".rk-one[data-file]").forEach(function(btn){
       btn.onclick=function(){ grabOne(btn, btn.dataset.file, btn.dataset.i||""); };
+    });
+    body.querySelectorAll(".rk-tab[data-doc]").forEach(function(t){
+      t.onclick=function(){
+        body.querySelectorAll(".rk-tab[data-doc]").forEach(function(x){x.classList.remove("on");});
+        t.classList.add("on");
+        var doc=body.querySelector("#rkDoc");
+        var src=t.dataset.doc==="vi"?d.listing_vi:d.listing_en;
+        if(doc&&src&&src.text) doc.textContent=src.text;
+      };
     });
     var all=body.querySelector("#rkAllShots");
     if(all) all.onclick=async function(){
