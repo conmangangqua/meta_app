@@ -2475,7 +2475,11 @@
   .rk-act{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
   .rk-act button{flex:1 1 0;min-width:140px;padding:12px;border-radius:12px;font-weight:700;
     font-size:.9rem;border:none;cursor:pointer;font-family:inherit;box-sizing:border-box;line-height:1.2}
-  .rk-rf{background:#7c3aed;color:#fff}
+  /* "Cập nhật từ Figma" là thao tác NỘI BỘ: ép export lại ảnh store từ Figma.
+     Partner không đụng Figma, bấm nhầm thì đốt hạn mức Figma (đã từng khoá 110h)
+     và ghi đè bộ ảnh đang dùng → chỉ hiện cho tier admin (build PIN). */
+  .rk-rf{background:#7c3aed;color:#fff;display:none}
+  body.aab-authed:not(.partner-authed) .rk-rf{display:inline-flex}
   .rk-rf:disabled{opacity:.55;cursor:progress}
   /* Phải là `.rk-act button.rk-cl` chứ không phải `.rk-cl`: `.rk-act button` có
      specificity cao hơn nên sẽ đè mất flex:0 0 auto → nút Đóng phình bằng nút chính. */
