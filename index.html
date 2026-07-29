@@ -2464,6 +2464,12 @@
     padding:4px 10px;font-size:.75rem;font-weight:700}
   .rk-desc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
     font-size:.85rem;color:#0f172a;max-height:190px;overflow:auto;white-space:pre-wrap;line-height:1.5}
+  /* Khối "nhắc bot gen": CHỈ admin (build PIN) — 3 endpoint gen đều gate BUILD_PIN. */
+  .rk-admin{display:none;margin-top:18px;border-top:1px dashed #e2e8f0;padding-top:10px}
+  body.aab-authed:not(.partner-authed) .rk-admin{display:block}
+  .rk-gap{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:9px 12px;margin-top:8px}
+  .rk-gap span{font-size:.84rem;font-weight:700;color:#92400e}
   .rk-miss{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:10px 14px;
     font-size:.84rem;font-weight:600;margin-top:12px}
   .rk-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:10px 14px;
@@ -2610,6 +2616,25 @@
       h+=secRow('AAB', [], '<a class="rk-one rk-link" href="'+esc(d.aab.url)+'">⬇ Tải AAB</a>')
         +'<div class="rk-url">'+esc(d.aab.name)+' — '+mb(d.aab.size)+'</div>';
     }
+    // Admin: phần nào trống thì hiện nút nhắc @Tranquil_Bot gen (Sếp 2026-07-29).
+    // Map đúng workflow: description/listing → /generate-store-description,
+    // data safety → /play-data-safety-csv, privacy+terms → /generate-privacy-and-terms-docs.
+    var gaps=[];
+    if(!d.description||!d.listing_en) gaps.push({ep:'gendesc',t:'Store description + listing EN/VI',ic:'📝'});
+    if(!d.data_safety) gaps.push({ep:'gendatasafety',t:'Data safety CSV',ic:'🛡️'});
+    if(!d.privacy_url||!d.terms_url) gaps.push({ep:'genlegal',t:'Privacy Policy + Terms',ic:'⚖️'});
+    if(gaps.length||!(d.screenshots&&d.screenshots.length)){
+      h+='<div class="rk-admin"><div class="rk-sec">Thiếu dữ liệu — nhắc bot gen (chỉ admin)</div>';
+      gaps.forEach(function(g){
+        h+='<div class="rk-gap"><span>'+g.ic+' '+esc(g.t)+'</span>'
+          +'<button type="button" class="rk-one" data-gen="'+g.ep+'">🔔 Nhắc bot gen</button></div>';
+      });
+      if(!(d.screenshots&&d.screenshots.length)){
+        h+='<div class="rk-gap"><span>🖼️ Ảnh store (screenshot + feature)</span>'
+          +'<span class="rk-meta">Dùng nút "Cập nhật từ Figma" bên dưới</span></div>';
+      }
+      h+='</div>';
+    }
     if(d.missing&&d.missing.length){
       h+='<div class="rk-miss">Thiếu: '+d.missing.map(esc).join(" · ")+'</div>';
     }
@@ -2617,6 +2642,24 @@
     // Gắn handler tải lẻ cho mọi nút vừa render.
     body.querySelectorAll(".rk-one[data-file]").forEach(function(btn){
       btn.onclick=function(){ grabOne(btn, btn.dataset.file, btn.dataset.i||""); };
+    });
+    body.querySelectorAll("[data-gen]").forEach(function(b){
+      b.onclick=async function(){
+        var old=b.textContent; b.disabled=true; b.textContent="⏳ Đang gửi…";
+        st.style.color="#64748b"; st.textContent="";
+        try{
+          var r=await fetch(API+"/api/"+b.dataset.gen,{
+            method:"POST",headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({app_id:cur.id,pin:pin()})});
+          var j=await r.json();
+          if(!r.ok||j.ok===false) throw new Error(j.error||("HTTP "+r.status));
+          b.textContent="✅ Đã nhắc bot";
+          st.textContent=j.message||"Đã gửi thông báo lên Discord + assign @Tranquil_Bot.";
+        }catch(e){
+          b.textContent=old; st.style.color="#ef4444";
+          st.textContent="❌ "+e.message+(/PIN/i.test(e.message)?" (nút này cần build PIN admin)":"");
+        }finally{ b.disabled=false; }
+      };
     });
     body.querySelectorAll("[data-copy]").forEach(function(b){
       b.onclick=function(){
