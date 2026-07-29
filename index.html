@@ -2432,7 +2432,13 @@
   .rk-sec-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 8px}
   .rk-sec-row .rk-sec{margin:0}
   .rk-sec-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-  .rk-feat img{width:100%;max-width:420px;border-radius:10px;border:1px solid #e2e8f0}
+  .rk-feat img{width:100%;border-radius:10px;border:1px solid #e2e8f0;display:block}
+  /* Hàng trên cùng: Icon (cố định hẹp) + Feature graphic (giãn hết phần còn lại). */
+  .rk-top{display:flex;gap:18px;align-items:flex-start}
+  .rk-top-icon{flex:0 0 auto}
+  .rk-top-feat{flex:1 1 0;min-width:0}
+  .rk-top .rk-sec-row{margin-top:0}
+  @media(max-width:620px){.rk-top{flex-direction:column}.rk-top-feat{width:100%}}
   .rk-icons{display:flex;gap:14px;align-items:center}
   .rk-icons img{width:76px;height:76px;border-radius:16px;border:1px solid #e2e8f0}
   /* Tải lẻ từng file (Sếp 2026-07-28) */
@@ -2503,6 +2509,23 @@
 
   function render(d){
     var h="";
+    // Sếp 2026-07-29: Icon + Feature graphic đứng CHUNG 1 HÀNG ở trên cùng
+    // (icon nhỏ, feature rộng) rồi mới tới Screenshot — tiết kiệm chiều cao popup.
+    if(d.icon||d.feature){
+      h+='<div class="rk-top">';
+      if(d.icon){
+        h+='<div class="rk-top-icon">'
+          +secRow('Icon', [{f:'icon512',t:'⬇ 512'},{f:'icon',t:'⬇ Gốc'}])
+          +'<div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
+          +'<div class="rk-meta">'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div></div>';
+      }
+      if(d.feature){
+        h+='<div class="rk-top-feat">'
+          +secRow('Feature graphic ('+d.feature.w+'×'+d.feature.h+')', [{f:'feature',t:'⬇ Tải'}])
+          +'<div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div></div>';
+      }
+      h+='</div>';
+    }
     if(d.screenshots&&d.screenshots.length){
       h+='<div class="rk-sec-row"><div class="rk-sec">Screenshot ('+d.screenshots.length+' ảnh '+d.screenshots[0].w+'×'+d.screenshots[0].h+')</div>'
         +'<button type="button" class="rk-one" id="rkAllShots">⬇ Tải '+d.screenshots.length+' ảnh</button></div><div class="rk-shots">';
@@ -2510,16 +2533,6 @@
         h+='<img loading="lazy" src="'+esc(s.url)+'" alt="'+esc(s.name)+'">';
       });
       h+='</div>';
-    }
-    if(d.feature){
-      h+=secRow('Feature graphic ('+d.feature.w+'×'+d.feature.h+')',
-                [{f:'feature',t:'⬇ Tải'}])
-        +'<div class="rk-feat"><img loading="lazy" src="'+esc(d.feature.url)+'"></div>';
-    }
-    if(d.icon){
-      h+=secRow('Icon', [{f:'icon512',t:'⬇ 512×512 (cho Play)'},{f:'icon',t:'⬇ Bản gốc'}])
-        +'<div class="rk-icons"><img src="'+esc(d.icon.url)+'">'
-        +'<div class="rk-meta">'+esc(d.icon.name)+'<br>'+mb(d.icon.size)+'<br>'+esc(d.icon.note||"")+'</div></div>';
     }
     if(d.listing_en||d.data_safety){
       var hs=[];
