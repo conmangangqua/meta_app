@@ -2688,6 +2688,9 @@
     });
     body.querySelectorAll("[data-gen]").forEach(function(b){
       b.onclick=async function(){
+        /* PIN_ONCE: không hỏi PIN nữa (đã đăng nhập) → hỏi xác nhận có/không. */
+        var ten={gendesc:"Store description + listing",gendatasafety:"Data safety CSV",genlegal:"Privacy + Terms"}[b.dataset.gen]||b.dataset.gen;
+        if(!confirm("Nhắc @Tranquil_Bot gen "+ten+" cho "+cur.id+"?\n\nBot sẽ nhận thông báo trên Discord của app.")) return;
         var old=b.textContent; b.disabled=true; b.textContent="⏳ Đang gửi…";
         st.style.color="#64748b"; st.textContent="";
         try{
@@ -2800,7 +2803,12 @@
     load(false);
   };
 
-  rf.onclick=function(){ load(true); };
+  rf.onclick=function(){
+    /* PIN_ONCE: xác nhận trước khi export lại — thao tác này gọi Figma (tốn hạn
+       mức) và ghi đè bộ ảnh đang dùng. */
+    if(!confirm("Export lại ảnh store từ Figma cho "+cur.id+"?\n\nSẽ ghi đè bộ ảnh hiện tại và tốn hạn mức Figma.")) return;
+    load(true);
+  };
 
 })();</script>
 
@@ -2854,6 +2862,32 @@
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",start);
   else start();
+})();</script>
+<script>/* PIN_ONCE — đăng nhập 1 lần, chức năng chỉ hỏi xác nhận */
+(function(){
+  function pin(){ try{ return sessionStorage.getItem("aab_pin")||""; }catch(e){ return ""; } }
+  function apply(root){
+    var p=pin(); if(!p) return;
+    (root||document).querySelectorAll('input[type="password"]').forEach(function(i){
+      if(i.id==="aablPin") return;              // ô đăng nhập: giữ nguyên
+      if(i.dataset.pinOnce) { i.value=p; return; }
+      i.dataset.pinOnce="1"; i.value=p;
+      i.style.display="none";
+      // ẩn nhãn ngay trước ô (thường là <label>Nhập PIN</label>)
+      var prev=i.previousElementSibling;
+      if(prev && (prev.tagName==="LABEL" || /pin/i.test(prev.textContent||""))) prev.style.display="none";
+    });
+  }
+  // Popup dựng sẵn trong HTML, nhưng vài chỗ chèn động → quan sát cả body.
+  function start(){
+    apply(document);
+    new MutationObserver(function(){ apply(document); })
+      .observe(document.body,{childList:true,subtree:true});
+    // sau khi đăng nhập xong mới có PIN → áp lại
+    window.addEventListener("storage",function(){ apply(document); });
+    document.addEventListener("click",function(){ setTimeout(function(){apply(document);},60); },true);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",start); else start();
 })();</script>
 </body>
 </html>
