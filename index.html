@@ -2840,6 +2840,11 @@
           +'<div class="rk-fv'+(kieu?' '+kieu:'')+'">'+esc(gt)+'</div></div>';
       };
       P.mota+=secRow('Store description', [{f:'description',t:ic('download')+'Tải .txt'}]);
+      /* Sếp 2026-07-31: đối tác cần 2 trường đọc từ SOURCE (không phải hồ sơ
+         store) để tạo đúng bản ghi trên Play Console. Đặt lên ĐẦU vì đây là thứ
+         phải khớp trước khi bàn tới nội dung mô tả. */
+      P.mota+= ô('Tên hiển thị trên app', f.app_label)
+             + ô('Package name', f.package_id, 0, 'mono');
       P.mota+= ô('Title', f.app_name, 50)
              + ô('Short description', f.short, 80)
              + ô('Long description', f.long, 4000, 'tall')
@@ -3511,6 +3516,8 @@
     'Content rating':       ['Phân loại nội dung', 'Content rating'],
     'Feature graphic':      ['Ảnh bìa Feature', 'Feature graphic'],
     'Screenshot':           ['Ảnh chụp màn hình', 'Screenshot'],
+    'Tên hiển thị trên app': ['Tên hiển thị trên app', 'App display name'],
+    'Package name':         ['Package name', 'Package name'],
     // ── nhãn nút trên card
     'Assets':               ['Tài nguyên', 'Assets'],
     'Screenshots':          ['Ảnh chụp màn hình', 'Screenshots'],
