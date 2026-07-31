@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <!-- BEGIN canonical-redirect -->
+  <!-- script bỏ để test -->
+  <!-- END canonical-redirect --><!-- hub:meta v1 -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>T1 (không script) — Meta 🤝 Tranquil Mind Studio - Premium App Center</title>
+  <link href="fonts.css" rel="stylesheet">
+  <style>
+    /* POPUP_PRIMARY_SYNC2 (Sếp 2026-07-29): các popup Screenshots/Release
+       notes/Store link vẫn giữ thang màu riêng (cyan/cam/xanh) sau lượt map
+       theo mã màu — nay map theo selector để chúng cũng ăn theo --primary.
+       Badge platform (iOS/Android) giữ nguyên vì là màu nhận diện nền tảng. */
+    /* POPUP_PRIMARY_SYNC (Sếp 2026-07-29): thang tím #7c3aed/#ede9fe và teal
+       #0d9488 của bản gốc đã map sang dẫn xuất var(--primary) để popup ăn theo
+       brand từng hub (adc-media đỏ mà nút "Nhắc bot gen" tím là lệch rõ).
+       Màu NGỮ NGHĨA giữ nguyên: đỏ = lỗi, vàng = cảnh báo, lục = thành công. */
+    :root {
+      --primary: #0866FF;
+      /* Bản ĐẬM của primary, dùng cho nút nền-đặc chữ trắng. Lấy thẳng
+         --primary thì hub sáng không đủ 4.5:1 (đo: affica 2.15, game 2.8…).
+         Giá trị tính sẵn để chữ trắng đạt ≥4.6:1, không phụ thuộc color-mix. */
+      --primary-strong: #0866FF;;
+      --primary-glow: rgba(8, 102, 255, 0.3);
+      --secondary: #60a5fa;
+      --bg-main: #fafbff;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --text-main: #172554;
+      --text-muted: #1e40af;
+      --glass-border: rgba(8, 102, 255, 0.1);
+      --card-radius: 60px; /* Playful Rounded */
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+    .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: var(--bg-main); }
+    .blob { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(8, 102, 255, 0.12) 0%, transparent 70%); border-radius: 50%; animation: drift 30s infinite alternate ease-in-out; }
+    .blob-2 { background: radial-gradient(circle, rgba(251, 113, 133, 0.08) 0%, transparent 70%); width: 600px; height: 600px; right: -5%; top: 5%; animation-duration: 25s; }
+    @keyframes drift { from { transform: translate(-10%, -10%) scale(1); } to { transform: translate(15%, 20%) scale(1.1); } }
+    header { padding: 90px 20px 20px; text-align: center; max-width: 920px; margin: 0 auto; }
+    header h1 { font-size: clamp(1.25rem, 4.2vw, 2.4rem); white-space: nowrap; font-weight: 800; opacity: 0.9; background: linear-gradient(135deg, var(--text-main) 30%, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    header h1 .hs { -webkit-text-fill-color: initial; -webkit-background-clip: initial; background: none; opacity: 1; }
+    .search-section { max-width: 860px; margin: 40px auto 30px; padding: 0 20px; position: sticky; top: 20px; z-index: 100; }
+    .search-wrapper { position: relative; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 30px; box-shadow: 0 10px 40px rgba(8, 102, 255, 0.05); }
+    .search-wrapper input { width: 100%; background: transparent; border: none; padding: 18px 25px 18px 60px; color: var(--text-main); font-size: 1rem; font-weight: 600; outline: none; }
+    .search-wrapper::before { content: '🔍'; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
+    main { flex: 1; width: 100%; max-width: 1800px; margin: 0 auto; padding: 20px 40px 100px; }
+    #appContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; }
+    .app-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 2px solid var(--glass-border); border-radius: var(--card-radius); padding: 50px 40px; display: flex; flex-direction: column; transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1); opacity: 0; transform: rotate(1deg) translateY(50px); animation: reveal 0.8s forwards; box-shadow: 0 15px 45px rgba(8, 102, 255, 0.06); }
+    .app-desc{min-height:42px}
+    .badge-row{min-height:34px}
+    /* ANTI_FLICKER ②: giữ sẵn chỗ cho mô tả + badge (đổ về sau qua API) để
+       card không cao lên giữa chừng gây giật. */
+    .app-card:hover { transform: rotate(0deg) translateY(-15px); background: #ffffff; border-color: var(--primary-strong,var(--primary,#334155)); box-shadow: 0 45px 85px -20px rgba(8, 102, 255, 0.15), 0 0 25px var(--primary-glow); }
+    .app-icon-box { width: 120px; height: 120px; margin: 0 auto 35px; border-radius: 50%; padding: 10px; background: #eff6ff; box-shadow: 0 10px 25px rgba(8, 102, 255, 0.1); display: flex; align-items: center; justify-content: center; }
+    .app-icon { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .badge { font-size: 0.8rem; font-weight: 800; padding: 7px 18px; border-radius: 20px; text-transform: uppercase; }
+    .badge.android { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .badge.ios { background: #fae8ff; color: #701a75; border: 1px solid #f5d0fe; }
+    .app-title { font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 12px; color: var(--text-main); }
+    .app-desc { font-size: 1.05rem; color: var(--text-muted); text-align: center; margin-bottom: 35px; flex-grow: 1; font-weight: 500; font-style: italic; }
+    .app-desc:empty{display:none}
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .btn { padding: 18px 12px; border-radius: 30px; font-weight: 700; font-size: 0.95rem; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.4s; }
+    .btn:active { transform: scale(0.92); }
+    /* BTN_PALETTE_TAI: nhóm link tải (Dev/Live/AAB) dùng chung nền trung tính;
+   trước đây mỗi hub một màu (meta hồng/hồng, affica vàng/xanh lá) nên nhìn
+   như 3 nhóm khác nhau. Live nổi hơn Dev nhờ chữ màu primary. */
+    /* BTN_ONE_STYLE (Sếp 2026-07-30: "3 4 style khác nhau"): lưới nút chỉ còn
+       MỘT style nền tảng với 2 cấp nhấn — SOLID cho 2 nút Build (hành động
+       chính), TINT cho mọi nút còn lại. Trước đó Dev/Live là outline nền
+       card, Tải AAB là neutral xám #f1f5f9, Store là xanh lá solid, nhóm
+       chức năng là tint → 4 kiểu trên cùng một lưới. */
+    /* BTN_TONE_STEPS (Sếp 2026-07-30: "cùng 1 style nhưng khác nhau 1 chút cho
+       đỡ nhàm, chứ ko phải y hệt nhau"): giữ NGUYÊN một công thức (nền tint
+       theo --card-bg, chữ theo --text-main, viền 1.5px) nhưng chia 3 bậc sắc
+       độ theo vai trò: chức năng 11%% · nhóm tải 18%% · No-Ads 30%%. Chỉ Build
+       AAB giữ nền đặc làm điểm nhấn duy nhất. */
+    .btn-dev{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));text-decoration:none;}
+    .btn-live{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));text-decoration:none;}
+    .btn-full{grid-column:span 2;background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));text-decoration:none;}
+    .btn-full:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+
+    .btn-stack { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; line-height: 1.1; max-width: 100%; text-align: center; }
+    .btn-stack .ver { font-size: 10px; font-weight: 600; opacity: 0.75; letter-spacing: 0; }
+    footer { padding: 80px 20px; text-align: center; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; border-top: 1px solid var(--glass-border); }
+    @keyframes reveal { to { opacity: 1; transform: rotate(0deg) translateY(0); } }
+    @media (max-width: 768px) { #appContainer { grid-template-columns: 1fr; } .search-section { top: 10px; } }
+    /* ===== CATEGORY: pill trên card + chips filter ===== */
+    .cat-chips { max-width: 1200px; margin: 0 auto 10px; padding: 0 40px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .cat-chip { cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: 700; padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--glass-border); background: var(--card-bg); color: var(--text-muted); transition: all .25s; display: inline-flex; align-items: center; gap: 6px; }
+    .cat-chip:hover { border-color: var(--primary-strong,var(--primary,#334155)); color: var(--primary-strong,var(--primary,#334155)); transform: translateY(-1px); }
+    .cat-chip.active { background: var(--primary-strong,var(--primary,#334155)); color: #fff; border-color: var(--primary-strong,var(--primary,#334155)); box-shadow: 0 6px 16px var(--primary-glow); }
+    .cat-chip .cnt { font-size: 0.72rem; font-weight: 800; opacity: .7; background: rgba(128,128,128,0.22); padding: 1px 7px; border-radius: 999px; }
+    .cat-chip.active .cnt { background: rgba(255,255,255,0.25); opacity: 1; }
+    .pill-category { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 800; padding: 5px 11px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; box-shadow: 0 4px 12px rgba(79,70,229,0.28); }
+    .pill-category.cat-src-override { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 4px 12px rgba(217,119,6,0.28); }
+    .pill-category.cat-src-ai { background: linear-gradient(135deg, color-mix(in srgb,var(--primary,#334155) 78%,#fff) 0%, var(--primary,#334155) 100%); box-shadow: 0 4px 12px rgba(124,58,237,0.28); }
+    .pill-category.cat-src-gitlab { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); box-shadow: 0 4px 12px rgba(100,116,139,0.25); }
+    .pill-category i, .pill-category svg { width: 11px; height: 11px; stroke-width: 2.4; }
+    /* badge-row phải WRAP để pill category KHÔNG đẩy ads/health badge ra ngoài (overflow:hidden cắt mất) */
+    .badge-row { flex-wrap: wrap !important; overflow: visible !important; row-gap: 8px; }
+  </style>
+  <style>/* AAB_TRIGGER_INJECTED */
+    /* Sếp 2026-07-29: 2 nút build vốn để đen #0f172a + nâu #b45309, chẳng liên
+     quan primary nên nhìn lạc khỏi cả trang. Nay cùng một hệ, phân biệt bằng
+     SẮC ĐỘ: Build AAB = primary đậm, No-Ads = bản tối hơn (chữ trắng ~9:1). */
+    /* BTN_SURFACE_V2 (Sếp 2026-07-30 "xấu vl" + skill ui-ux-pro-max):
+       phân cấp bằng SIZE/CONTRAST chứ không tô màu cả lưới (rule
+       visual-hierarchy), và chỉ MỘT CTA chính (rule primary-action).
+       Nút phụ: surface trung tính dẫn xuất từ --text-main nên tự thích
+       ứng hub sáng/tối; màu brand dồn vào ICON + hover + CTA. */
+    .btn-build{grid-column:span 2;background:var(--primary-strong,var(--primary,#334155));color:#fff;border:1px solid var(--primary-strong,var(--primary,#334155));cursor:pointer;font-family:inherit;min-height:60px;font-size:1rem;letter-spacing:.01em;box-shadow:0 6px 16px color-mix(in srgb,var(--primary,#334155) 28%,transparent)}
+    /* BTN_PAIR_ROW (Sếp 2026-07-29): xếp cặp Build / Download cùng hàng.
+       Chỉ bỏ span 2 khi lưới THẬT SỰ có nút no-ads đi kèm (dùng :has), để app
+       không có bản no-ads vẫn giữ nút rộng cả hàng, không hở nửa hàng trống. */
+    .btn-grid:has(.btn-noadsb) .btn-build{grid-column:auto}
+    .btn-grid:has(.btn-noads)  .btn-full{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));text-decoration:none;}
+    /* Trình duyệt cũ không hỗ trợ :has() thì rơi về hành vi cũ (span 2) — chấp nhận được. */
+    .btn-build:hover{background:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 86%,#000)}
+    .btn-store{grid-column:span 2;background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));text-decoration:none;}
+    .btn-store:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    .aab-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:99999;padding:20px}
+    .aab-ov.open{display:flex}
+    .aab-md{background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,.3);font-family:inherit}
+    .aab-md h3{font-size:1.25rem;color:#0f172a;margin:0 0 4px}
+    .aab-md .sub{font-size:.85rem;color:#64748b;margin:0 0 18px;font-weight:600}
+    .aab-md label{display:block;font-size:.72rem;font-weight:700;color:#64748b;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.03em}
+    .aab-md input{width:100%;padding:12px 15px;border:1.5px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:600;color:#0f172a;outline:none;box-sizing:border-box}
+    .aab-md input:focus{border-color:#0f172a}
+    .aab-act{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .aab-act button{padding:13px;border-radius:14px;font-weight:700;font-size:.9rem;border:none;cursor:pointer;font-family:inherit}
+    .aab-cancel{background:#f1f5f9;color:#475569}
+    /* #059669 + chữ trắng chỉ 3.77:1 (đo) → bản đậm của primary */
+    .aab-ok{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+    .aab-ok:disabled{opacity:.55;cursor:not-allowed}
+    .aab-st{margin-top:14px;font-size:.83rem;font-weight:600;text-align:center;min-height:18px;word-break:break-word;color:#64748b}
+    .aab-st a{color:#059669;font-weight:800}
+    /* STORE_META_INJECTED */
+    .store-meta{margin-top:10px;text-align:center;font-size:.78rem;font-weight:600;color:#64748b;letter-spacing:.02em}
+    .store-meta .icon{margin-right:4px}
+    .store-ver{display:inline-flex;align-items:center;gap:4px;font-weight:800;color:var(--primary);margin-right:10px}
+    .store-ver i,.store-ver svg{width:11px;height:11px;stroke-width:2.4;flex-shrink:0}
+  </style>
+    <style>/* AAB_BTNFIX4 (icon+text centered together) */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;position:relative;min-height:64px}  /* BTN_ONE_STYLE: nút 2 dòng (có version) và 1 dòng cao bằng nhau */
+    .btn-ic{color:var(--primary-strong,var(--primary,#334155));position:static;display:inline-flex;flex-shrink:0;align-items:center;justify-content:center;width:18px;height:18px;line-height:1;pointer-events:none;color:currentColor;transform:none;left:auto;top:auto}
+    .btn-ic svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+    .btn-stack{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:auto;min-width:0}
+    .btn-stack .ver{white-space:nowrap;font-size:10px}
+    @media (max-width:480px){ .btn-stack .ver{font-size:9px} }
+    @media (max-width:600px){
+      main{padding-left:14px;padding-right:14px}
+      #appContainer{grid-template-columns:1fr;gap:20px}
+      .app-card{padding:24px}
+    }
+  </style>
+
+
+  <script src="lucide.min.js" defer></script>
+  <style>/* AAB_BTNFIX5 (unified icon+text centered) */
+    .btn{display:inline-flex !important;align-items:center !important;justify-content:center !important;gap:10px !important;position:relative}
+    .btn-ic{position:static !important;display:inline-flex !important;flex-shrink:0;align-items:center;justify-content:center;width:18px;height:18px;line-height:1;pointer-events:none;color:currentColor;transform:none !important;left:auto !important;top:auto !important}
+    .btn-ic svg{width:18px !important;height:18px !important;stroke:currentColor !important;stroke-width:2 !important;fill:none !important}
+    .btn-stack{display:inline-flex !important;flex-direction:column;align-items:center;justify-content:center;width:auto !important;min-width:0;max-width:100%;text-align:center}
+    .btn-stack .ver{white-space:nowrap;font-size:10px}
+    .badge-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;overflow:visible;row-gap:8px;margin-bottom:18px}
+  </style>
+  <style>/* badge-gradient-override */
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 800; padding: 6px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .badge i, .badge svg { width: 14px; height: 14px; stroke-width: 2.2; }
+    .badge.ios, .platform-badge.ios { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important; color: #fff !important; box-shadow: 0 4px 12px rgba(14,165,233,0.3); border: none !important; }
+    .badge.android, .platform-badge.android { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important; color: #fff !important; box-shadow: 0 4px 12px rgba(22,163,74,0.3); border: none !important; }
+  </style>
+  <style>/* PRO_MAX_UI_UPGRADE */
+    /* Button base: pill, smooth, depth */
+    .btn {
+      border-radius: 14px !important;
+      padding: 13px 18px !important;
+      font-weight: 700 !important;
+      font-size: 0.92rem !important;
+      letter-spacing: 0.01em !important;
+      transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, background 0.2s ease, filter 0.2s ease !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+      filter: brightness(1.08) !important;
+    }
+    .btn:active {
+      transform: translateY(0) scale(0.98) !important;
+      transition-duration: 0.08s !important;
+    }
+    .btn:focus-visible {
+      outline: 2px solid rgba(99, 102, 241, 0.6);
+      outline-offset: 2px;
+    }
+    /* Card hover lift */
+    .app-card {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.3s ease !important;
+    }
+    .app-card:hover {
+      transform: translateY(-4px) !important;
+    }
+    /* Smooth icon scale on button hover */
+    .btn:hover .btn-ic svg { transform: scale(1.08); transition: transform 0.2s ease; }
+    .btn-ic svg { transition: transform 0.2s ease; }
+    /* Badge prominence — gradient with stronger shadow */
+    .badge.ios, .platform-badge.ios {
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+      color: #fff !important;
+      box-shadow: 0 6px 16px rgba(14,165,233,0.35), 0 2px 4px rgba(14,165,233,0.2) !important;
+      border: none !important;
+      padding: 6px 14px !important;
+      font-weight: 800 !important;
+    }
+    .badge.android, .platform-badge.android {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+      color: #fff !important;
+      box-shadow: 0 6px 16px rgba(22,163,74,0.35), 0 2px 4px rgba(22,163,74,0.2) !important;
+      border: none !important;
+      padding: 6px 14px !important;
+      font-weight: 800 !important;
+    }
+    /* Health badge styling tighter */
+    .health-badge { padding: 4px 10px !important; font-size: 0.7rem !important; }
+    /* App-icon polish */
+    .app-icon-box, .app-icon {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+    }
+    .app-card:hover .app-icon-box, .app-card:hover .app-icon {
+      transform: scale(1.05) !important;
+    }
+    /* Search input polish */
+    .search-wrapper:focus-within, input:focus {
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+    }
+  </style>
+  <style>/* PRO_MAX_DESC_MODAL */
+    #vdOv, #rnOv { animation: vdFadeIn 0.25s ease-out; }
+    #vdOv.open #vdMd { animation: vdSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes vdFadeIn { from { background: rgba(0,0,0,0); backdrop-filter: blur(0); } to { background: rgba(0,0,0,.55); backdrop-filter: blur(6px); } }
+    @keyframes vdSlideUp { from { transform: translateY(40px) scale(0.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+    #vdMd {
+      background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%) !important;
+      border: 1px solid rgba(124, 58, 237, 0.08) !important;
+      box-shadow: 0 50px 120px rgba(15, 23, 42, 0.35), 0 8px 24px rgba(124, 58, 237, 0.1) !important;
+    }
+    #vdMd h3 {
+      font-size: 1.55rem !important;
+      font-weight: 800 !important;
+      background: linear-gradient(135deg, #1e293b 0%, var(--primary,#334155) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px !important;
+      letter-spacing: -0.02em;
+    }
+    #vdMd h3 i { color: var(--primary-strong,var(--primary,#334155)); -webkit-text-fill-color: var(--primary,#334155); }
+    #vdMd .s {
+      font-size: 0.95rem !important;
+      color: #475569 !important;
+      font-weight: 600;
+    }
+    #vdPlat { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, color-mix(in srgb,var(--primary,#334155) 11%,#fff), #f3e8ff); color: color-mix(in srgb,var(--primary,#334155) 85%,#000) !important; padding: 4px 12px !important; border-radius: 20px; font-size: 0.72rem !important; margin: 4px 0 16px !important; }
+    #vdMd .lbrow {
+      align-items: center !important;
+      padding: 4px 0 !important;
+      border-top: 1px dashed rgba(124, 58, 237, 0.08);
+      margin: 20px 0 8px !important;
+    }
+    #vdMd .lbrow:first-of-type { border-top: none; margin-top: 8px !important; }
+    #vdMd .lb {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 8px !important;
+      position: relative;
+      padding-left: 14px;
+    }
+    #vdMd .lb::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 4px; height: 16px;
+      background: linear-gradient(180deg, var(--primary,#334155) 0%, #a78bfa 100%);
+      border-radius: 2px;
+    }
+    #vdMd .cp {
+      transition: transform 0.15s ease, background 0.2s ease !important;
+      box-shadow: 0 2px 6px rgba(124, 58, 237, 0.15);
+    }
+    #vdMd .cp:hover { transform: translateY(-1px); background: color-mix(in srgb,var(--primary,#334155) 24%,#fff) !important; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25); }
+    #vdMd .box {
+      background: #fafbfc !important;
+      border: 1px solid #e2e8f0 !important;
+      border-left: 3px solid color-mix(in srgb,var(--primary,#334155) 35%,#fff) !important;
+      transition: border-color 0.2s ease;
+    }
+    #vdMd .box:hover { border-left-color: var(--primary,#334155) !important; }
+    #vdMd .box a { transition: color 0.15s ease; }
+    #vdMd .box a:hover { color: color-mix(in srgb,var(--primary,#334155) 58%,#000) !important; }
+    #vdMd input {
+      transition: border-color 0.18s ease, box-shadow 0.18s ease !important;
+    }
+    #vdMd input:focus {
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15) !important;
+    }
+    #vdAct button {
+      transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+      font-size: 0.92rem !important;
+      letter-spacing: 0.01em;
+    }
+    #vdAct button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    #vdAct button:active { transform: scale(0.98); }
+    .vd-gen { box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3) !important; }
+    .vd-gen:hover { box-shadow: 0 10px 24px rgba(124, 58, 237, 0.4) !important; }
+    .health-urls { animation: vdFadeIn 0.3s ease-out; }
+  </style>
+  <style>/* ADS_BADGE_UNIFIED */
+    .ads-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 800; padding: 6px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1; white-space: nowrap; }
+    .ads-badge i, .ads-badge svg { width: 12px; height: 12px; stroke-width: 2.2; flex-shrink: 0; }
+    .ads-badge.has-ads { background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%); color: #fff; box-shadow: 0 4px 12px rgba(245,158,11,0.35); }
+    .ads-badge.no-ads { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); color: #fff; box-shadow: 0 4px 12px rgba(100,116,139,0.25); }
+    /* Sếp 2026-06-24: badge PROD ADS — check bản LIVE Play Store có ads chưa
+       (khác badge BUILD ADS bên trên — cái đó check build/SDK).
+       4 state: ads (xanh), clean (xám), mismatch (đỏ pulse), unknown (mờ). */
+    /* Sếp 2026-06-25: badge ADS đơn giản — Yes/No từ Play Console Data Safety
+       (giống dashboard apps-status cột Ads). Logic phức tạp 6 stage được tạm
+       gác lại vì có false positive (Genify AI). Sau khi research kỹ pattern
+       sẽ bật trở lại. */
+    .prod-ads-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 800; padding: 6px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1; white-space: nowrap; cursor: help; }
+    .prod-ads-badge i, .prod-ads-badge svg { width: 12px; height: 12px; stroke-width: 2.2; flex-shrink: 0; }
+    /* Sếp 2026-06-25 v2: 4 state — Có ads / Không ads / Lệch compliance / ?
+       Source: store_info.contains_ads (Play Console Data Safety scrape) +
+       adscheck.has_ads (source code grep sdk-compliance-auditor). */
+    .prod-ads-badge.prod-ads { background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%); color: #fff; box-shadow: 0 4px 12px rgba(245,158,11,0.35); }
+    .prod-ads-badge.prod-noads { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); color: #fff; box-shadow: 0 4px 10px rgba(100,116,139,0.25); }
+    .prod-ads-badge.prod-mismatch { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #fff; box-shadow: 0 4px 12px rgba(220,38,38,0.45); animation: prodAdsAlert 2s ease-in-out infinite; }
+    .prod-ads-badge.prod-unknown { background: rgba(148,163,184,0.18); color: #64748b; border: 1px dashed rgba(148,163,184,0.4); }
+    @keyframes prodAdsAlert { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    .badge-row { display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: wrap !important; overflow: visible !important; row-gap: 8px; margin-bottom: 18px; }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"><div class="blob"></div><div class="blob blob-2"></div></div>
+  <header><h1>Meta <span class="hs">🤝</span> Tranquil Mind Studio</h1></header>
+  
+  <section class="search-section"><div class="search-wrapper"><input type="text" id="searchInput" placeholder="Search for apps..." oninput="filterApps()"></div></section>
+  <div class="cat-chips" id="catChips"></div>
+  <main><div id="appContainer"></div></main>
+  <footer><p>&copy; 2026 Meta 🤝 Tranquil Mind Studio. Powered by Platinum Engine.</p></footer>
+  <!-- script bỏ để test -->
+
+  <div class="aab-ov" id="buildModal">
+    <div class="aab-md">
+      <h3 id="bmTitle"><i data-lucide="hammer" style="width:20px;height:20px;vertical-align:-4px;margin-right:8px"></i>Build</h3>
+      <p class="sub" id="bmApp"></p>
+      <label>Version Name</label>
+      <input type="text" id="bmName" placeholder="vd 1.0.1" autocomplete="off">
+      <label>Version Code</label>
+      <input type="text" id="bmCode" inputmode="numeric" placeholder="vd 26051501" autocomplete="off">
+      <label>Mã PIN</label>
+      <input type="password" id="bmPin" inputmode="numeric" placeholder="Nhập PIN" autocomplete="off">
+      <div class="aab-st" id="bmStatus"></div>
+      <div class="aab-act">
+        <button type="button" class="aab-cancel" onclick="closeBuildModal()">Huỷ</button>
+        <button type="button" class="aab-ok" id="bmOk" onclick="submitBuild()">Build</button>
+      </div>
+    </div>
+  </div>
+  <!-- NO_ADS_BUILD: modal để designer kích build bản tắt quảng cáo -->
+  <div class="aab-ov" id="noAdsModal">
+    <div class="aab-md">
+      <h3><i data-lucide="shield-off" style="width:20px;height:20px;vertical-align:-4px;margin-right:8px"></i>Build bản No-Ads</h3>
+      <p class="sub" id="naApp"></p>
+      <p style="font-size:.82rem;color:#64748b;margin:-4px 0 10px">Dựng APK Dev đã tắt toàn bộ quảng cáo (phục vụ designer). Dùng version hiện tại của repo.</p>
+      <label>Mã PIN</label>
+      <input type="password" id="naPin" inputmode="numeric" placeholder="Nhập PIN" autocomplete="off">
+      <div class="aab-st" id="naStatus"></div>
+      <div class="aab-act">
+        <button type="button" class="aab-cancel" onclick="closeNoAdsModal()">Huỷ</button>
+        <button type="button" class="aab-ok" id="naOk" onclick="submitNoAds()">Build No-Ads</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- script bỏ để test -->
+
+  <style>/* AAB_LOGIN */
+    .btn-build{display:none!important}
+    body.aab-authed:not(.partner-authed) .btn-build{display:flex!important}
+    #aablBtn{position:fixed;right:16px;bottom:16px;z-index:100000;background:#0f172a;color:#fff;border:none;border-radius:999px;padding:12px 18px;font:600 14px/1 system-ui,-apple-system,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer}
+    #aablOv{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100001;padding:20px}
+    #aablOv.open{display:flex}
+    /* LOGIN_UI_V2 — theo style hub: font Plus Jakarta Sans + var(--primary),
+       thay vì system-ui + màu hardcode như trước. */
+    #aablMd{background:#fff;color:#0f172a;border-radius:22px;padding:28px 24px;width:100%;max-width:360px;
+      box-shadow:0 30px 80px rgba(0,0,0,.28);font-family:inherit}
+    #aablMd h3{margin:0;font-size:1.2rem;font-weight:800;color:#0f172a;
+      display:flex;align-items:center;gap:9px}
+    #aablSub{margin:6px 0 18px;font-size:.83rem;font-weight:600;color:#64748b}
+    #aablField{position:relative}
+    #aablMd input{width:100%;box-sizing:border-box;padding:13px 46px 13px 16px;
+      border:1.5px solid #e2e8f0;border-radius:14px;font-family:inherit;
+      font-size:1rem;font-weight:700;letter-spacing:.08em;color:#0f172a;
+      background:#f8fafc;outline:none;transition:border-color .2s,background .2s}
+    #aablMd input:focus{border-color:var(--primary,#0f172a);background:#fff}
+    #aablEye{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;
+      display:flex;align-items:center;justify-content:center;border:none;background:transparent;
+      color:#64748b;cursor:pointer;border-radius:9px;padding:0}
+    #aablEye:hover{background:#f1f5f9;color:var(--primary,#0f172a)}
+    #aablMsg{min-height:18px;margin-top:10px;font-size:.82rem;font-weight:700;text-align:center;color:#ef4444}
+    #aablAct{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    #aablAct button{padding:13px;border:none;border-radius:14px;font-weight:800;font-size:.92rem;
+      cursor:pointer;font-family:inherit}
+    .aabl-cancel{background:#f1f5f9;color:#475569}
+    .aabl-ok{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+    .aabl-ok:hover{filter:brightness(1.08)}
+  </style>
+  <button id="aablBtn" type="button"><i data-lucide="lock-keyhole" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i>Đăng nhập</button>
+  <div id="aablOv"><div id="aablMd">
+    <h3><i data-lucide="lock-keyhole" style="width:19px;height:19px"></i>Đăng nhập</h3>
+    <div id="aablSub">Nhập mã PIN để mở các chức năng quản trị</div>
+    <div id="aablField">
+      <input id="aablPin" type="password" inputmode="numeric" placeholder="Nhập mã PIN" autocomplete="off">
+      <button type="button" id="aablEye" title="Hiện / ẩn mã PIN"><i data-lucide="eye"></i></button>
+    </div>
+    <div id="aablMsg"></div>
+    <div id="aablAct">
+      <button type="button" class="aabl-cancel" id="aablCancel">Huỷ</button>
+      <button type="button" class="aabl-ok" id="aablOk">Đăng nhập</button>
+    </div>
+  </div></div>
+  <!-- script bỏ để test -->
+
+  <style>/* AAB_SNACK */
+    #aabSnack{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);
+      max-width:92vw;width:max-content;background:#0f172a;color:#fff;padding:14px 18px;border-radius:14px;
+      font:600 14px/1.4 system-ui,-apple-system,sans-serif;box-shadow:0 12px 40px rgba(0,0,0,.35);
+      z-index:100002;opacity:0;transition:transform .35s cubic-bezier(.2,.9,.3,1),opacity .35s;
+      display:flex;align-items:center;gap:14px;text-align:left}
+    #aabSnack.show{transform:translateX(-50%) translateY(0);opacity:1}
+    #aabSnack.err{background:#b91c1c}
+    #aabSnack a{color:#6ee7b7;font-weight:800;text-decoration:none;white-space:nowrap}
+    #aabSnack .x{cursor:pointer;opacity:.7;font-weight:800}
+  </style>
+  <div id="aabSnack"></div>
+  <!-- script bỏ để test -->
+
+  <style>/* AAB_GENDESC AAB_VIEWDESC */
+  /* BTN_PALETTE_PRIMARY (Sếp 2026-07-29): nút tiện ích dùng chung tint
+     --primary của hub thay vì mỗi nút một màu tím/lục/cyan/teal cứng.
+     Chữ mix 58% với đen để hub primary sáng (cam/vàng) vẫn đủ contrast. */
+    .btn-gd{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    /* Sếp 2026-07-28: partner tier CHỈ thấy "Gói phát hành" — Release Notes là
+       việc nội bộ, ẩn khỏi partner (build tier/admin vẫn thấy). */
+    #rnMd input{width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;font-weight:600;outline:none;margin-top:16px}
+    #rnMd input:focus{border-color:var(--primary,#334155)}
+    #rnAct{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:16px}
+    #rnAct button{padding:13px;border:none;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.92rem;display:flex;align-items:center;justify-content:center;gap:6px}
+    .rn-close{background:#f1f5f9;color:#475569}
+    .rn-close:hover{background:#e2e8f0}
+    .rn-gen{background:linear-gradient(135deg,var(--primary,#334155),color-mix(in srgb,var(--primary,#334155) 85%,#000));color:#fff;box-shadow:0 8px 20px -8px rgba(234,88,12,.7)}
+    .rn-gen:hover{filter:brightness(1.06)}
+    .rn-gen:disabled{opacity:.6;cursor:progress;box-shadow:none}
+    .rn-empty{text-align:center;padding:26px 16px}
+    .rn-empty .ic{width:64px;height:64px;margin:0 auto 14px;border-radius:18px;background:linear-gradient(135deg,#fff7ed,color-mix(in srgb,var(--primary,#334155) 11%,#fff));display:grid;place-items:center;box-shadow:0 8px 20px -10px rgba(234,88,12,.5)}
+    .rn-empty .t{font-weight:800;font-size:1rem;color:#0f172a;margin-bottom:7px}
+    .rn-empty .d{font-size:.85rem;color:#64748b;line-height:1.65;max-width:440px;margin:0 auto}
+    .rn-empty code{background:#f1f5f9;padding:1px 6px;border-radius:6px;font-size:.82em;color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);font-weight:700}
+    .rn-card{border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;margin-bottom:14px}
+    .rn-card-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0;font-weight:800;font-size:.82rem;color:#0f172a}
+    .rn-card-h .lim{font-weight:700;color:#64748b;font-size:.78rem}
+    .rn-note{padding:14px 16px;font-size:.9rem;line-height:1.7;color:#0f172a;white-space:pre-wrap;word-break:break-word;max-height:34vh;overflow:auto}
+    .btn-gd:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    body.aab-authed:not(.partner-authed) .btn-gd{display:flex!important}
+    #vdOv,#rnOv{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100001;padding:24px}
+    #vdOv.open{display:flex}
+    #vdMd,#rnMd{background:#fff;color:#0f172a;border-radius:24px;padding:32px 36px;width:100%;max-width:960px;max-height:94vh;overflow:auto;box-shadow:0 40px 100px rgba(0,0,0,.35);font-family:system-ui,-apple-system,sans-serif}
+    #vdMd h3,#rnMd h3{margin:0 0 4px;font-size:1.4rem;color:#0f172a;display:flex;align-items:center;gap:9px}
+    #vdMd h3 i,#rnMd h3 i{width:22px;height:22px}
+    #vdMd h3 i{color:var(--primary-strong,var(--primary,#334155));-webkit-text-fill-color:var(--primary,#334155)}
+    #rnMd h3 i{color:var(--primary-strong,var(--primary,#334155));-webkit-text-fill-color:var(--primary,#334155)}
+    #vdMd .s,#rnMd .s{font-size:.92rem;color:#64748b;margin:0 0 18px;font-weight:600}
+    #vdMd .lbrow,#rnMd .lbrow{display:flex;align-items:center;justify-content:space-between;margin:18px 0 8px}
+    /* Nhãn field là chữ nhỏ 12.8px nên cần ≥4.5:1. Lấy nguyên primary thì 5 hub
+       trượt (affica 2.15, azura 2.43, game 2.8, demo/herond/tranquil 3.77); mix 65%
+       với đen là mức vừa đủ — thấp nhất affica 4.75 — mà vẫn giữ được sắc brand. */
+    #vdMd .lb,#rnMd .lb{font-size:.8rem;font-weight:800;color:color-mix(in srgb,var(--primary,#334155) 65%,#000);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+    #rnMd .lb{color:var(--primary-strong,var(--primary,#334155))}
+    #rnMd .lb i{width:15px;height:15px}
+    #vdMd .cp,#rnMd .cp{background:color-mix(in srgb,var(--primary,#334155) 11%,#fff);color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);border:none;border-radius:10px;padding:8px 16px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:inherit}
+    #rnMd .cp{background:color-mix(in srgb,var(--primary,#334155) 11%,#fff);color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000)}
+    #vdMd .cp:active,#rnMd .cp:active{transform:scale(.94)}
+    #vdMd .box,#rnMd .box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:16px 18px;font-size:.95rem;line-height:1.6;color:#0f172a;white-space:pre-wrap;word-break:break-word;max-height:55vh;overflow:auto}
+    #rnMd .lim{font-weight:700;color:#64748b;font-size:.78rem;margin-right:8px}
+    #rnMd .rn-saved{font-size:.8rem;color:#047857;font-weight:700;display:flex;align-items:center;gap:6px;margin:-4px 0 14px}
+    #rnMd .rn-saved i{width:15px;height:15px}
+    @media(max-width:720px){
+      #vdOv,#rnOv{padding:12px}
+      #vdMd,#rnMd{padding:20px 18px;border-radius:18px}
+      #vdMd h3,#rnMd h3{font-size:1.15rem}
+      #vdMd .box,#rnMd .box{font-size:.88rem;max-height:42vh}
+    }
+    @media(max-width:720px){
+      #vdOv,#rnOv{padding:12px}
+      #vdMd,#rnMd{padding:20px 18px;border-radius:18px}
+      #vdMd h3{font-size:1.15rem}
+      #vdMd .box{font-size:.88rem;max-height:42vh}
+    }
+    #vdMd input{width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;font-weight:600;outline:none;margin-top:16px}
+    #vdMd input:focus{border-color:var(--primary,#334155)}
+    #vdMsg{min-height:18px;margin-top:8px;font-size:.8rem;font-weight:600;text-align:center;color:#ef4444}
+    #vdAct{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}#vdAct>button{flex:1 1 0;min-width:150px;order:1}#vdAct .vd-close{flex:0 0 auto;min-width:96px;order:9}
+/* === CHUẨN HOÁ MODAL ACTIONS (2026-07-28) === */
+#rnAct,#aablAct,#stAct{display:flex !important;flex-wrap:wrap;gap:10px}
+#rnAct>button,#aablAct>button,#stAct>button{flex:1 1 0;min-width:140px;padding:12px;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:inherit;box-sizing:border-box;line-height:1.2}
+#rnAct button[onclick*="Close("],#aablAct button[onclick*="Close("],#stAct button[onclick*="Close("]{flex:0 0 auto;min-width:96px;order:9;background:#f1f5f9;color:#475569;border:1.5px solid #e2e8f0}
+    #vdAct button{padding:12px;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit}
+    .vd-close{background:#f1f5f9;color:#475569}
+    .vd-gen{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+    .vd-gen:disabled{opacity:.55;cursor:not-allowed}
+.vd-spin{width:48px;height:48px;border:4px solid color-mix(in srgb,var(--primary,#334155) 11%,#fff);border-top-color:var(--primary,#334155);border-radius:50%;animation:vdspin .8s linear infinite}
+    @keyframes vdspin{to{transform:rotate(360deg)}}
+  </style>
+  <div id="vdOv"><div id="vdMd">
+    <h3><i data-lucide="file-text" style="width:20px;height:20px;vertical-align:-4px;margin-right:8px"></i>Hồ sơ Store</h3>
+    <p class="s" id="vdApp"></p>
+    <p class="s" id="vdPlat" style="font-size:.75rem;color:var(--primary-strong,var(--primary,#334155));font-weight:700;margin:-6px 0 8px"></p>
+    <div id="vdFields">Đang tải…</div>
+    <input id="vdPin" type="password" inputmode="numeric" placeholder="Nhập PIN để Gen lại" autocomplete="off">
+    <div id="vdMsg"></div>
+    <div id="vdAct">
+      <button type="button" class="vd-close" onclick="vdClose()">Đóng</button>
+      <button type="button" class="vd-gen" id="vdGenBtn" onclick="vdGen()"><i data-lucide="bell" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i>Nhắc bot gen Description</button>
+      <button type="button" id="vdGenLegalBtn" onclick="vdGenLegal()" style="padding:12px;border:1.5px solid color-mix(in srgb,var(--primary,#334155) 24%,#fff);border-radius:12px;font-weight:700;cursor:pointer;background:color-mix(in srgb,var(--primary,#334155) 6%,#fff);color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);font-family:inherit"><i data-lucide="bell" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i>Nhắc bot gen Privacy/Terms</button>
+    </div>
+  </div></div>
+  <div id="rnOv" style="display:none"><div id="rnMd">
+    <h3><i data-lucide="megaphone"></i>Release Notes</h3>
+    <p class="s" id="rnApp"></p>
+    <div id="rnBody"></div>
+    <input id="rnPin" type="password" inputmode="numeric" placeholder="Nhập PIN để tạo" autocomplete="off">
+    <div id="rnMsg"></div>
+    <div id="rnAct">
+      <button type="button" class="rn-close" onclick="rnClose()">Đóng</button>
+      <button type="button" class="rn-gen" id="rnGenBtn" onclick="rnGen()"><i data-lucide="git-commit-horizontal" style="width:15px;height:15px"></i>Tạo từ commit version</button>
+    </div>
+  </div></div>
+  <!-- script bỏ để test -->
+  <style>/* AAB_ASSETS */
+    .btn-as{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    .btn-as:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    .btn-as:disabled{opacity:.6;cursor:progress}
+    body.aab-authed:not(.partner-authed) .btn-as{display:flex!important}
+    /* BA_DOC_GEN — only visible after auth (like .btn-as) */
+    .btn-ba{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    .btn-ba:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    .btn-ba:disabled{opacity:.6;cursor:progress}
+    body.aab-authed:not(.partner-authed) .btn-ba{display:flex!important}
+    .btn-ss{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    .btn-ss:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    .btn-ss:disabled{opacity:.6;cursor:progress}
+    body.aab-authed:not(.partner-authed) .btn-ss{display:flex!important}
+    .btn-fl{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    .btn-fl:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    body.aab-authed:not(.partner-authed) .btn-fl{display:flex!important}
+    /* Kiểm tra cấu hình + SDK — CHỈ build tier/admin. Sếp 2026-07-28: ẩn khỏi
+       partner tier, partner chỉ cần "Gói phát hành". */
+    .btn-cfg{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    .btn-cfg:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    body.aab-authed:not(.partner-authed) .btn-cfg{display:flex!important}
+    /* RELEASE_KIT — gói ảnh store + description để partner tự đẩy app lên Play.
+       Hiện cho MỌI user đã login (cả partner tier) — đây là thứ partner cần nhất. */
+    .btn-rk{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    .btn-rk:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    .btn-rk:disabled{opacity:.6;cursor:progress}
+    body.aab-authed .btn-rk{display:flex!important}
+    /* Partner chỉ thấy đúng nút này nên cho rộng cả hàng; admin thấy nhiều nút
+       nên để 1 cột như các nút khác (Sếp 2026-07-29). */
+    body.aab-authed.partner-authed .btn-rk{display:flex!important}
+      /* NO_ADS_BUILD — nút phục vụ designer, chỉ hiện sau đăng nhập (như .btn-as) */
+    /* #d97706 + chữ trắng chỉ đạt 3.19:1 (đo) → dùng bậc đậm hơn */
+  .btn-noadsb{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border:1.5px solid color-mix(in srgb,var(--primary,#334155) 42%,var(--card-bg,#fff));cursor:pointer;display:none!important}
+    .btn-noadsb:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff))}
+    .btn-noadsb:disabled{opacity:.6;cursor:progress}
+    body.aab-authed:not(.partner-authed) .btn-noadsb{display:flex!important}
+    .btn-noads{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));text-decoration:none;display:none!important;}
+    .btn-noads:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+    body.aab-authed:not(.partner-authed) .btn-noads{display:flex!important}
+    /* BA modal */
+    #baOv{position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
+    #baOv.open{display:flex}
+    #baModal{background:#fff;color:#0f172a;border-radius:20px;width:100%;max-width:920px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden}
+    #baHdr{padding:18px 24px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,var(--primary,#334155),color-mix(in srgb,var(--primary,#334155) 85%,#000));color:#fff}
+    #baHdr h3{font-size:1.05rem;font-weight:800;margin:0;letter-spacing:.3px}
+    #baClose{background:rgba(255,255,255,.2);color:#fff;border:none;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:1.2rem;font-weight:700}
+    #baClose:hover{background:rgba(255,255,255,.35)}
+    #baTabs{display:flex;gap:6px;padding:12px 20px 0;border-bottom:1px solid #e2e8f0;flex-wrap:wrap}
+    .ba-tab{background:#f1f5f9;color:#475569;border:none;padding:9px 14px;border-radius:8px 8px 0 0;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}
+    .ba-tab:hover{background:#e2e8f0}
+    .ba-tab.active{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+    #baBody{flex:1;overflow:auto;padding:22px 28px;background:#fafafa;color:#0f172a;font-size:.88rem;line-height:1.6}
+    #baBody pre{background:#fff;border:1px solid #e2e8f0;padding:14px;border-radius:10px;overflow:auto;font-size:.78rem}
+    #baBody h1{font-size:1.5rem;margin:0 0 12px;color:var(--primary-strong,var(--primary,#334155))}
+    #baBody h2{font-size:1.15rem;margin:18px 0 8px;border-bottom:2px solid #e2e8f0;padding-bottom:4px;color:#0f172a}
+    #baBody h3{font-size:1rem;margin:14px 0 6px;color:#475569}
+    #baBody table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.82rem}
+    #baBody th,#baBody td{border:1px solid #e2e8f0;padding:6px 10px;text-align:left}
+    #baBody th{background:#f1f5f9;font-weight:700}
+    #baBody blockquote{border-left:4px solid color-mix(in srgb,var(--primary,#334155) 35%,#fff);padding:8px 16px;background:color-mix(in srgb,var(--primary,#334155) 6%,#fff);margin:8px 0;color:color-mix(in srgb,var(--primary,#334155) 58%,#000)}
+    #baBody code{background:#f1f5f9;padding:2px 6px;border-radius:5px;font-size:.85em;color:var(--primary-strong,var(--primary,#334155))}
+    #baBody a{color:var(--primary-strong,var(--primary,#334155));font-weight:600}
+    #baBody ul,#baBody ol{padding-left:22px;margin:6px 0}
+    #baFt{border-top:1px solid #e2e8f0;padding:14px 24px;background:#fff;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    #baFt input{flex:0 0 180px;padding:9px 12px;border:1px solid #cbd5e1;border-radius:9px;font-size:.85rem;font-family:inherit}
+    #baFt input:focus{outline:none;border-color:var(--primary,#334155);box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+    #baGenBtn{background:var(--primary-strong,var(--primary,#334155));color:#fff;border:none;padding:10px 18px;border-radius:9px;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit}
+    #baGenBtn:hover{background:color-mix(in srgb,var(--primary,#334155) 85%,#000)}
+    #baGenBtn:disabled{opacity:.55;cursor:progress}
+    #baMsg{font-size:.8rem;font-weight:600;flex:1;text-align:right;color:#64748b}
+    #baViewLink{font-size:.78rem;color:var(--primary-strong,var(--primary,#334155));font-weight:600;text-decoration:none;margin-left:auto}
+    #baViewLink:hover{text-decoration:underline}
+    .ba-empty{padding:60px 20px;text-align:center;color:#64748b}
+    .ba-empty h3{color:var(--primary-strong,var(--primary,#334155));margin-bottom:8px}
+    .ba-spin{width:28px;height:28px;border:3px solid #e2e8f0;border-top-color:var(--primary,#334155);border-radius:50%;animation:baspin 1s linear infinite;margin:0 auto}
+    @keyframes baspin{to{transform:rotate(360deg)}}
+  </style>
+
+  <div id="baOv" role="dialog" aria-modal="true">
+    <div id="baModal">
+      <div id="baHdr">
+        <h3 id="baTitle">BA + Tests</h3>
+        <button id="baClose" onclick="baClose()" aria-label="Close">✕</button>
+      </div>
+      <div id="baTabs">
+        <button class="ba-tab active" data-file="BA.vi.md">📋 BA (Tiếng Việt)</button>
+        <button class="ba-tab" data-file="BA.en.md">📋 BA (English)</button>
+        <button class="ba-tab" data-file="TESTCASES.vi.md">✅ Tests (Tiếng Việt)</button>
+        <button class="ba-tab" data-file="TESTCASES.en.md">✅ Tests (English)</button>
+        <a id="baViewLink" href="#" target="_blank" rel="noopener">Xem GitHub →</a>
+      </div>
+      <div id="baBody"><div class="ba-spin"></div></div>
+      <div id="baFt">
+        <input id="baPin" type="password" placeholder="PIN để Gen" autocomplete="off">
+        <button id="baGenBtn" onclick="baGen()"><i data-lucide="sparkles" style="width:14px;height:14px"></i> Gen lại</button>
+        <span id="baMsg"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- script bỏ để test -->
+  <!-- script bỏ để test -->
+  <style>/* STORE_ADD */
+    .btn-addstore{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+    body.aab-authed:not(.partner-authed) .btn-addstore[data-has-store="0"]{display:flex!important;grid-column:span 2;background:var(--primary-strong,var(--primary,#334155));color:#fff;border:1px solid var(--primary,#334155);cursor:pointer;font-family:inherit}
+    body.aab-authed:not(.partner-authed) .btn-addstore[data-has-store="0"]:hover{background:color-mix(in srgb,var(--primary,#334155) 85%,#000)}
+    #stOv{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100001;padding:20px}
+    #stOv.open{display:flex}
+    #stMd{background:#fff;color:#0f172a;border-radius:20px;padding:26px 22px;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,.3);font-family:system-ui,-apple-system,sans-serif}
+    #stMd h3{margin:0 0 4px;font-size:1.15rem;color:#0f172a}
+    #stMd .sub{font-size:.82rem;color:#64748b;margin:0 0 16px;font-weight:600}
+    #stMd label{display:block;font-size:.72rem;font-weight:700;color:#64748b;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.03em}
+    #stMd input{max-width:100%;box-sizing:border-box;width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.95rem;font-weight:600;color:#0f172a;outline:none}
+    #stMd input:focus{border-color:var(--primary,#334155)}
+    #stMsg{min-height:18px;margin-top:10px;font-size:.82rem;font-weight:600;text-align:center;color:#ef4444}
+    #stAct{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    #stAct button{padding:12px;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit}
+    .st-cancel{background:#f1f5f9;color:#475569}
+    .st-ok{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+    .st-ok:disabled{opacity:.55;cursor:not-allowed}
+  </style>
+  <div id="stOv"><div id="stMd">
+    <h3><i data-lucide="plus" style="width:20px;height:20px;vertical-align:-4px;margin-right:8px"></i>Add Store Link</h3>
+    <p class="sub" id="stApp"></p>
+    <label>Store URL (Google Play / App Store)</label>
+    <input id="stUrl" type="url" placeholder="https://play.google.com/store/apps/details?id=..." autocomplete="off">
+    <label>Mã PIN</label>
+    <input id="stPin" type="password" inputmode="numeric" placeholder="Nhập PIN" autocomplete="off">
+    <div id="stMsg"></div>
+    <div id="stAct"><button type="button" class="st-cancel" onclick="stClose()">Huỷ</button><button type="button" class="st-ok" id="stOk" onclick="stSubmit()">Lưu</button></div>
+  </div></div>
+  <!-- script bỏ để test -->
+  <!-- script bỏ để test -->
+  <!-- SCREENSHOTS gallery modal -->
+  <div id="ssOv" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px">
+    <div style="background:#fff;color:#0f172a;border-radius:16px;max-width:900px;width:100%;max-height:88vh;overflow:auto;padding:22px">
+      <h3 id="ssTitle" style="margin:0 0 4px"><i data-lucide="image" style="width:20px;height:20px;vertical-align:-4px;margin-right:8px"></i>Screenshots</h3>
+      <p id="ssMsg" style="font-size:.85rem;color:#64748b;min-height:18px;margin:6px 0"></p>
+      <div id="ssGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px"></div>
+      <input id="ssPin" type="password" inputmode="numeric" placeholder="Nhập PIN để Gen lại" autocomplete="off" style="width:100%;margin-top:14px;padding:10px;border:1.5px solid #e2e8f0;border-radius:10px;font-family:inherit">
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <button type="button" onclick="ssClose()" style="flex:1;padding:11px;border:1.5px solid #e2e8f0;border-radius:10px;background:#f8fafc;font-weight:700;cursor:pointer;font-family:inherit">Đóng</button>
+        <button type="button" id="ssDlBtn" onclick="ssDownloadAll()" style="flex:1;padding:11px;border:1.5px solid var(--primary,#334155);border-radius:10px;background:#fff;color:var(--primary-strong,var(--primary,#334155));font-weight:700;cursor:pointer;font-family:inherit"><i data-lucide="download" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i>Tải tất cả</button>
+        <button type="button" id="ssGenBtn" onclick="ssGen()" style="flex:1;padding:11px;border:none;border-radius:10px;background:var(--primary-strong,var(--primary,#334155));color:#fff;font-weight:700;cursor:pointer;font-family:inherit"><i data-lucide="refresh-cw" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i>Gen lại</button>
+      </div>
+    </div>
+  </div>
+  <!-- script bỏ để test -->
+
+  <!-- ===== Kiểm tra cấu hình + SDK (Phase 1: read-only) ===== -->
+  <style>
+    #cfgOv{position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
+    #cfgOv.open{display:flex}
+    #cfgModal{background:#fff;border-radius:20px;width:100%;max-width:760px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden}
+    #cfgHdr{padding:18px 24px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,var(--primary,#334155),color-mix(in srgb,var(--primary,#334155) 85%,#000));color:#fff}
+    #cfgHdr h3{font-size:1.05rem;font-weight:800;margin:0;letter-spacing:.3px}
+    #cfgClose{background:rgba(255,255,255,.2);color:#fff;border:none;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:1.2rem;font-weight:700}
+    #cfgClose:hover{background:rgba(255,255,255,.35)}
+    #cfgTabs{display:flex;gap:6px;padding:12px 20px 0;border-bottom:1px solid #e2e8f0;flex-wrap:wrap}
+    .cfg-tab{background:#f1f5f9;color:#475569;border:none;padding:9px 14px;border-radius:8px 8px 0 0;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}
+    .cfg-tab:hover{background:#e2e8f0}
+    .cfg-tab.active{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+    #cfgBody{flex:1;overflow:auto;padding:20px 24px;background:#fafafa;color:#0f172a;font-size:.88rem;line-height:1.55}
+    .cfg-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+    .cfg-row .k{font-weight:700;color:#0f172a;font-size:.85rem}
+    .cfg-row .src{font-size:.72rem;color:#64748b;margin-top:2px;word-break:break-all}
+    .cfg-row .v{font-family:ui-monospace,Menlo,monospace;font-size:.8rem;color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);word-break:break-all;max-width:300px;text-align:right}
+    /* Remote Config — card dọc, value JSON pretty-print nền tối dễ đọc */
+    .cfg-prow{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+    .cfg-phead{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+    .cfg-phead .k{font-weight:800;color:#0f172a;font-size:.9rem}
+    .cfg-ptype{color:var(--primary-strong,var(--primary,#334155));font-weight:700;font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;background:#f0fdfa;border:1px solid #99f6e4;padding:1px 7px;border-radius:6px}
+    .cfg-pscalar{margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);word-break:break-all;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;padding:9px 11px}
+    .cfg-json{margin:8px 0 0;background:#0f172a;color:#5eead4;font:600 12px/1.55 ui-monospace,Menlo,monospace;padding:12px 14px;border-radius:10px;overflow:auto;max-height:300px;white-space:pre;tab-size:2}
+    .cfg-json .jk{color:#7dd3fc}.cfg-json .js{color:#86efac}.cfg-json .jn{color:#fca5a5}.cfg-json .jb{color:#fdba74}
+    /* Sửa Remote Config */
+    .cfg-rcedit-btn{margin-left:auto;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;border-radius:7px;padding:4px 10px;font-size:.74rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit}
+    .cfg-rcedit-btn:hover{background:#ffedd5}
+    .cfg-rcedit{width:100%;margin-top:8px;background:#0f172a;color:#5eead4;font:600 12px/1.55 ui-monospace,Menlo,monospace;padding:12px 14px;border:1px solid #334155;border-radius:10px;min-height:140px;resize:vertical;box-sizing:border-box}
+    .cfg-rcedit:focus{outline:none;border-color:var(--primary,#334155);box-shadow:0 0 0 3px rgba(13,148,136,.25)}
+    .cfg-rcbar{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+    .cfg-rcbar input{flex:0 0 150px;padding:8px 11px;border:1px solid #cbd5e1;border-radius:8px;font-size:.82rem;font-family:inherit}
+    .cfg-rcbar input:focus{outline:none;border-color:var(--primary,#334155);box-shadow:0 0 0 3px rgba(13,148,136,.15)}
+    .cfg-rcbtn{background:#b45309;color:#fff;border:none;padding:9px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+    .cfg-rcbtn:hover{background:#c2410c}.cfg-rcbtn:disabled{opacity:.55;cursor:progress}
+    .cfg-rcghost{background:#f1f5f9;color:#475569;border:none;padding:9px 14px;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}
+    .cfg-rcghost:hover{background:#e2e8f0}
+    .cfg-rcmsg2{font-size:.78rem;font-weight:600}
+    .cfg-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:700;white-space:nowrap}
+    .cfg-badge.ok{background:#d1fae5;color:#047857}
+    .cfg-badge.no{background:#fee2e2;color:#b91c1c}
+    .cfg-badge.up{background:#fef3c7;color:#b45309}
+    .cfg-empty{padding:50px 20px;text-align:center;color:#64748b}
+    .cfg-spin{width:28px;height:28px;border:3px solid #e2e8f0;border-top-color:var(--primary,#334155);border-radius:50%;animation:cfgspin 1s linear infinite;margin:30px auto}
+    @keyframes cfgspin{to{transform:rotate(360deg)}}
+    .cfg-note{font-size:.78rem;color:#64748b;margin:4px 0 14px;padding:8px 12px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px}
+    .cfg-add{margin-top:14px;padding:14px;background:#fff;border:1px dashed var(--primary,#334155);border-radius:10px}
+    .cfg-addrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .cfg-addrow input{flex:0 0 180px;padding:9px 12px;border:1px solid #cbd5e1;border-radius:9px;font-size:.85rem;font-family:inherit}
+    .cfg-addrow input:focus{outline:none;border-color:var(--primary,#334155);box-shadow:0 0 0 3px rgba(13,148,136,.15)}
+    #cfgAddBtn{background:var(--primary-strong,var(--primary,#334155));color:#fff;border:none;padding:10px 16px;border-radius:9px;font-size:.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+    #cfgAddBtn:hover{background:color-mix(in srgb,var(--primary,#334155) 85%,#000)}
+    #cfgAddBtn:disabled{opacity:.55;cursor:progress}
+    #cfgAddMsg{font-size:.8rem;font-weight:600;margin-top:10px}
+    .cfg-fin{width:100%;margin-top:6px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:#0f172a}
+    .cfg-fin:focus{outline:none;border-color:var(--primary,#334155);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+    #cfgSaveBtn{background:var(--primary-strong,var(--primary,#334155));color:#fff;border:none;padding:10px 16px;border-radius:9px;font-size:.85rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+    #cfgSaveBtn:hover{background:color-mix(in srgb,var(--primary,#334155) 85%,#000)}
+    #cfgSaveBtn:disabled{opacity:.55;cursor:progress}
+    #cfgSaveMsg{font-size:.8rem;font-weight:600;margin-top:10px}
+  </style>
+  <div id="cfgOv" role="dialog" aria-modal="true">
+    <div id="cfgModal">
+      <div id="cfgHdr">
+        <h3 id="cfgTitle">Kiểm tra cấu hình</h3>
+        <button id="cfgClose" onclick="cfgClose()" aria-label="Close">✕</button>
+      </div>
+      <div id="cfgTabs">
+        <button class="cfg-tab active" data-tab="config" onclick="cfgSwitch('config')">🔑 Cấu hình token</button>
+        <button class="cfg-tab" data-tab="sdk" onclick="cfgSwitch('sdk')">📦 Kiểm tra SDK</button>
+        <button class="cfg-tab" data-tab="rc" onclick="cfgSwitch('rc')">🔥 Remote Config</button>
+      </div>
+      <div id="cfgBody"><div class="cfg-spin"></div></div>
+    </div>
+  </div>
+  <!-- script bỏ để test -->
+<!-- data-safety-widget --><style>
+  .btn-ds{background: color-mix(in srgb,var(--text-main,#0f172a) 4%,var(--card-bg,#fff));color: var(--text-main,#0f172a);border: 1px solid color-mix(in srgb,var(--text-main,#0f172a) 13%,var(--card-bg,#fff));cursor:pointer;display:none!important;}
+  .btn-ds:hover{background:color-mix(in srgb,var(--primary,#334155) 9%,var(--card-bg,#fff));border-color:color-mix(in srgb,var(--primary,#334155) 45%,var(--card-bg,#fff))}
+  /* Sếp 2026-07-28: Data Safety là việc nội bộ → ẩn khỏi partner tier. */
+  body.aab-authed:not(.partner-authed) .btn-ds{display:flex!important}
+  #dsMdOv{position:fixed;inset:0;background:rgba(2,6,23,.62);backdrop-filter:blur(4px);z-index:10000;display:none;align-items:center;justify-content:center;padding:18px}
+  #dsMdOv.open{display:flex}
+  /* MODAL_LIGHT_FIXED (Sếp 2026-07-29, ảnh popup login adc-media): modal nền
+     TRẮNG nên chữ/viền phải tối cố định. Trước đây lấy var(--text-main) cho
+     "đồng bộ với hub", nhưng adc-media là hub theme TỐI (--text-main #f5f5f7)
+     → chữ trắng trên nền trắng, gần như tàng hình. Chỉ accent (nút, focus,
+     tab active) mới dùng var(--primary) vì đó là màu thương hiệu. */
+  /* Kế thừa font của hub; màu chữ thì cố định theo nền modal. */
+  #dsMd{background:#fff;border-radius:22px;padding:26px 26px 22px;width:100%;max-width:860px;max-height:92vh;overflow:auto;box-shadow:0 40px 100px rgba(0,0,0,.35);font-family:inherit;color:#0f172a}
+  #dsMd h3{margin:0 0 3px;font-size:1.08rem;font-weight:800;display:flex;align-items:center;gap:8px}
+  #dsMd .sub{color:#64748b;font-size:.82rem;margin:0 0 16px}
+  #dsMd table,#rkMd .ds-tbl table{width:100%;border-collapse:collapse;font-size:.8rem}
+  #dsMd th,#dsMd td,#rkMd .ds-tbl th,#rkMd .ds-tbl td{text-align:left;padding:8px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+  #dsMd th,#rkMd .ds-tbl th{color:#64748b;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.03em}
+  #dsMd .bg,#rkMd .bg{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:800}
+  #dsMd .yes,#rkMd .yes{background:#dcfce7;color:#15803d}.no{background:#f1f5f9;color:#475569}
+  #dsMd .rev,#rkMd .rev{background:#fef3c7;color:#b45309}
+  /* DS_FULL_PREVIEW — khối khai báo cấp cao */
+  #dsMd .ds-sums,#rkMd .ds-sums{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+  #dsMd .ds-sm,#rkMd .ds-sm{display:flex;flex-direction:column;gap:2px;background:#f8fafc;
+    border:1px solid #e2e8f0;border-radius:12px;padding:8px 12px;min-width:150px}
+  #dsMd .ds-sm span,#rkMd .ds-sm span{font-size:.66rem;font-weight:700;color:#64748b;
+    text-transform:uppercase;letter-spacing:.03em}
+  #dsMd .ds-sm b,#rkMd .ds-sm b{font-size:.78rem;font-weight:700;color:#0f172a;word-break:break-word}
+  #dsMd .evi,#rkMd .evi{color:#475569;font-size:.72rem}
+  #dsMd .note{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:11px 13px;font-size:.78rem;color:#92400e;margin-top:16px}
+  #dsMd .act{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  #dsMd .act button{padding:11px 18px;border:none;border-radius:12px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.85rem}
+  #dsMd .ok{background:var(--primary-strong,var(--primary,#334155));color:#fff}.cp{background:color-mix(in srgb,var(--primary,#334155) 11%,#fff);color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000)}.cl{background:#f1f5f9;color:#334155}
+  #dsMd .spin{width:34px;height:34px;border:3px solid #e2e8f0;border-top-color:var(--primary,#0f172a);border-radius:50%;animation:dsSpin 1s linear infinite;margin:40px auto}
+  @keyframes dsSpin{to{transform:rotate(360deg)}}
+  #dsMd pre.dscsv{background:#0c1526;color:#cbd5e1;border:1px solid #1e293b;border-radius:12px;padding:12px 14px;margin-top:14px;font-size:.7rem;line-height:1.5;font-family:ui-monospace,Menlo,monospace;max-height:300px;overflow:auto;white-space:pre;word-break:normal}
+</style>
+<div id="dsMdOv"><div id="dsMd">
+  <h3>🛡️ Data Safety CSV — <span id="dsApp"></span></h3>
+  <p class="sub">Suy ra từ source thật (manifest + SDK trong pubspec/gradle). Import vào Play Console → App content → Data safety → Import from a CSV file.</p>
+  <div id="dsBody"></div>
+</div></div>
+<!-- script bỏ để test -->
+
+<style>/* RELEASE_KIT modal */
+  #rkOv{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;
+    align-items:center;justify-content:center;z-index:100003;padding:20px}
+  #rkOv.open{display:flex}
+  #rkMd{background:#fff;border-radius:20px;width:100%;max-width:860px;max-height:88vh;overflow:auto;
+    padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.35);font-family:inherit}
+  #rkMd h3{font-size:1.2rem;color:#0f172a;margin:0 0 2px}
+  #rkMd .rk-sub{font-size:.82rem;color:#64748b;font-weight:600;margin:0 0 16px}
+  .rk-sec{margin:18px 0 8px;font-size:.72rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+  /* Sếp 2026-07-29: 3 ảnh/hàng thay vì cuộn ngang — nhìn được cả bộ mà không phải kéo. */
+  .rk-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .rk-shots img{width:100%;height:auto;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc}
+  @media(max-width:560px){.rk-shots{grid-template-columns:repeat(2,1fr)}}
+  /* Hàng tiêu đề: chữ bên trái, nút tải cả bộ bên phải. */
+  /* RK_DS_TAB: bảng 7 cột rộng hơn modal → cuộn ngang trong khung riêng,
+     không để cả trang bị đẩy ngang. */
+  #rkMd .ds-tbl{overflow-x:auto;margin:4px 0 2px}
+  #rkMd .ds-tbl table{min-width:660px}
+  /* RK_TABS — thanh tab dùng đúng style .cat-chip của hub */
+  .rk-nav{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 16px;padding-bottom:14px;
+    border-bottom:1px solid #e2e8f0}
+  .rk-navb{cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:700;padding:8px 16px;
+    border-radius:999px;border:1.5px solid #e2e8f0;background:#fff;
+    color:#64748b;transition:all .2s}
+  .rk-navb:hover{border-color:var(--primary,#334155)}
+  .rk-navb.on{background:var(--primary-strong,var(--primary,#334155));border-color:var(--primary,#334155);color:#fff}
+  .rk-pane{display:none}
+  .rk-pane.on{display:block}
+  .rk-sec-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 8px}
+  .rk-sec-row .rk-sec{margin:0}
+  .rk-sec-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .rk-feat img{width:100%;border-radius:10px;border:1px solid #e2e8f0;display:block}
+  /* Hàng trên cùng: Icon (cố định hẹp) + Feature graphic (giãn hết phần còn lại). */
+  .rk-top{display:flex;gap:18px;align-items:flex-start}
+  .rk-top-icon{flex:0 0 auto}
+  .rk-top-feat{flex:1 1 0;min-width:0}
+  .rk-top .rk-sec-row{margin-top:0}
+  @media(max-width:620px){.rk-top{flex-direction:column}.rk-top-feat{width:100%}}
+  .rk-icons{display:flex;gap:14px;align-items:center}
+  .rk-icons img{width:170px;height:170px;border-radius:30px;border:1px solid #e2e8f0}
+  /* Tải lẻ từng file (Sếp 2026-07-28) */
+  .rk-item{position:relative;flex:0 0 auto;display:flex;flex-direction:column;gap:6px;align-items:center}
+  /* RK_MOTA_FULL: nút phụ lấy màu từ --primary của hub thay vì tím cứng. */
+  .rk-one{background:color-mix(in srgb,var(--primary,#334155) 10%,#fff);color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);border:1px solid color-mix(in srgb,var(--primary,#334155) 22%,#fff);border-radius:9px;padding:6px 12px;
+    font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .rk-one:hover{background:color-mix(in srgb,var(--primary,#334155) 18%,#fff)}
+  .rk-one:disabled{opacity:.5;cursor:progress}
+  .rk-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+  /* RK_MOTA_FULL: icon lucide (SVG) thay emoji — cùng bộ với nút ngoài card. */
+  .rk-one,.rk-navb,.rk-tab{display:inline-flex;align-items:center;gap:6px}
+  .rk-one svg,.rk-navb svg{width:14px;height:14px;flex:0 0 auto}
+  .rk-navb svg{width:15px;height:15px}
+  /* Hộp xem trước listing (.md) — cùng tông với .rk-desc, cao hơn vì tài liệu dài. */
+  .rk-doc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
+    font:500 .78rem/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#0f172a;
+    max-height:320px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+  .rk-tabs{display:flex;gap:6px}
+  .rk-tab{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:9px;
+    padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .rk-tab.on{background:var(--primary-strong,var(--primary,#334155));color:#fff;border-color:var(--primary,#334155)}
+  .rk-url{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:9px 12px;
+    font:600 .8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#1e293b;word-break:break-all}
+  a.rk-link{text-decoration:none;display:inline-flex;align-items:center}
+  .rk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .rk-chip{background:color-mix(in srgb,var(--primary,#334155) 10%,#fff);color:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 72%,#000);border:1px solid color-mix(in srgb,var(--primary,#334155) 22%,#fff);border-radius:999px;
+    padding:4px 10px;font-size:.75rem;font-weight:700}
+  .rk-desc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;
+    font-size:.85rem;color:#0f172a;max-height:190px;overflow:auto;white-space:pre-wrap;line-height:1.5}
+  /* RK_MOTA_FULL — bộ field giống popup Description (nhãn + giới hạn + Copy). */
+  .rk-f{margin-top:14px}
+  .rk-fh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+  .rk-fl{font-size:.72rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+  .rk-flim{font-size:.7rem;font-weight:700;color:#64748b}
+  .rk-flim.over{color:#b91c1c}
+  .rk-fv{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:11px 13px;
+    font-size:.85rem;color:#0f172a;white-space:pre-wrap;line-height:1.55;word-break:break-word}
+  /* Long description dài nhất → cho cao hẳn, đỡ phải cuộn trong hộp (Sếp 2026-07-29). */
+  .rk-fv.tall{max-height:460px;overflow:auto}
+  .rk-fv.mono{font:600 .8rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;color:#334155;word-break:break-all}
+  /* Khối "nhắc bot gen": CHỈ admin (build PIN) — 3 endpoint gen đều gate BUILD_PIN. */
+  .rk-admin{display:none;margin-top:18px;border-top:1px dashed #e2e8f0;padding-top:10px}
+  body.aab-authed:not(.partner-authed) .rk-admin{display:block}
+  .rk-gap{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:9px 12px;margin-top:8px}
+  .rk-gap span{font-size:.84rem;font-weight:700;color:#92400e}
+  .rk-miss{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:10px 14px;
+    font-size:.84rem;font-weight:600;margin-top:12px}
+  .rk-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;padding:10px 14px;
+    font-size:.84rem;font-weight:600;margin-top:12px}
+  .rk-meta{font-size:.78rem;color:#64748b;font-weight:600}
+  /* Theo CHUẨN HOÁ MODAL ACTIONS 2026-07-28 (giống #rnAct/#aablAct/#stAct):
+     nút chính đồng cỡ flex:1 1 0, nút Đóng cố định cỡ + order:9 xếp cuối.
+     Trước đây dùng margin-left:auto nên lệch chuẩn so với các popup khác. */
+  /* Hàng nút: kích thước theo nội dung, căn phải, Đóng đứng cuối.
+     Trước đây ép flex:1 1 0 nên với modal rộng ~700px mà chỉ có 1 nút chính thì
+     nút bị kéo dài hết hàng, nhìn rất kỳ (Sếp 2026-07-29). */
+  .rk-act{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  .rk-act button{flex:0 0 auto;min-width:132px;padding:12px 22px;border-radius:12px;font-weight:800;
+    font-size:.9rem;border:none;cursor:pointer;font-family:inherit;line-height:1.2}
+  .rk-rf{background:var(--primary-strong,var(--primary,#334155));color:#fff;display:none}
+  body.aab-authed:not(.partner-authed) .rk-rf{display:inline-flex}
+  .rk-rf:disabled{opacity:.55;cursor:progress}
+  .rk-act button.rk-cl{order:9;min-width:96px;background:#f1f5f9;color:#475569;border:1.5px solid #e2e8f0}
+  #rkSt{margin-top:12px;font-size:.85rem;font-weight:600;color:#64748b;min-height:18px}
+</style>
+<div id="rkOv"><div id="rkMd">
+  <h3 id="rkTitle">Gói phát hành</h3>
+  <p class="rk-sub" id="rkSub"></p>
+  <div id="rkBody"></div>
+  <div class="rk-act">
+    <button type="button" class="rk-rf" id="rkRf" title="Export lại ảnh từ Figma (dùng khi vừa sửa Figma)">Cập nhật từ Figma</button>
+    <button type="button" class="rk-cl" id="rkCl">Đóng</button>
+  </div>
+  <div id="rkSt"></div>
+</div></div>
+<!-- script bỏ để test -->
+
+<style>/* ROLE_BADGE — theo style .badge sẵn có của hub (pill pastel, uppercase) */
+  #aabRoleWrap{display:none;justify-content:center;margin:0 0 18px}
+  #aabRoleWrap.on{display:flex}
+  #aabRole{font-size:.8rem;font-weight:800;padding:7px 18px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px}
+  #aabRole.admin{background:color-mix(in srgb,var(--primary,#334155) 11%,#fff);color:color-mix(in srgb,var(--primary,#334155) 58%,#000);border:1px solid color-mix(in srgb,var(--primary,#334155) 24%,#fff)}
+  #aabRole.partner{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+</style>
+<!-- script bỏ để test -->
+<!-- script bỏ để test -->
+<!-- script bỏ để test -->
+<style>/* CONFIRM_UI */
+  #cfmOv{position:fixed;inset:0;background:rgba(2,6,23,.55);backdrop-filter:blur(4px);
+    z-index:100020;display:flex;align-items:center;justify-content:center;padding:20px}
+  #cfmMd{background:#fff;color:#0f172a;border-radius:20px;padding:24px 24px 20px;width:100%;
+    max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,.35);font-family:inherit}
+  #cfmMd h3{margin:0 0 8px;font-size:1.08rem;font-weight:800}
+  #cfmMd p{margin:0;font-size:.9rem;line-height:1.55;color:#475569;word-break:break-word}
+  #cfmMd .cfm-act{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+  #cfmMd .cfm-act button{min-width:104px;padding:11px 18px;border-radius:12px;font-weight:800;
+    font-size:.88rem;cursor:pointer;font-family:inherit;border:1px solid transparent}
+  #cfmMd .cfm-huy{background:#f1f5f9;color:#334155;border-color:#e2e8f0}
+  #cfmMd .cfm-huy:hover{background:#e2e8f0}
+  #cfmMd .cfm-ok{background:var(--primary-strong,var(--primary,#334155));color:#fff}
+  #cfmMd .cfm-ok:hover{background:color-mix(in srgb,var(--primary-strong,var(--primary,#334155)) 86%,#000)}
+  #cfmMd:focus{outline:none}
+  #cfmMd .cfm-ok:focus-visible,#cfmMd .cfm-huy:focus-visible{outline:3px solid
+    color-mix(in srgb,var(--primary,#334155) 45%,#fff);outline-offset:2px}
+</style>
+<!-- script bỏ để test -->
+<!-- script bỏ để test -->
+<!-- script bỏ để test -->
+</body>
+</html>
