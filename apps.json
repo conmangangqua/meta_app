@@ -8,7 +8,6 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/orbitly_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/orbitly_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/orbitly.aab"
       },
@@ -37,7 +36,7 @@
       },
       "versions": {
         "dev": "1.0.2+26080501",
-        "prod": "1.0.1+26080401",
+        "prod": "1.0.2+26080501",
         "aab": "1.0.1+26080401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
