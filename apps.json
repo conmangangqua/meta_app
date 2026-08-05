@@ -8,6 +8,7 @@
       "description": "",
       "features": [],
       "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/orbitly_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/orbitly_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/orbitly.aab"
       },
