@@ -36,7 +36,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/pullwave.aab"
       },
       "versions": {
-        "dev": "1.0.1+26080401",
+        "dev": "1.0.2+26080501",
         "prod": "1.0.1+26080401",
         "aab": "1.0.1+26080401"
       },
