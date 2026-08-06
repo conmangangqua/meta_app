@@ -1,6 +1,25 @@
 {
   "apps": [
     {
+      "id": "famering",
+      "name": "Famering",
+      "icon": "icons/famering.webp",
+      "platform": "Android",
+      "description": "",
+      "features": [],
+      "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/famering_dev.apk"
+      },
+      "versions": {
+        "dev": "1.0.0+1"
+      },
+      "store": "",
+      "category": "Entertainment",
+      "category_source": "store",
+      "store_updated": null,
+      "store_version": null
+    },
+    {
       "id": "orbitly",
       "name": "Orbitly",
       "icon": "icons/orbitly.webp",

@@ -6,5 +6,9 @@
   "pullwave": {
     "sha": "9863d16f4af1bd053d35d2ce8b516a9af76d09e9cf80bd452a2223292084d049",
     "src": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_icon.png"
+  },
+  "famering": {
+    "sha": "d819bfd4d24786e6865b3e813cb87dff4a535bd5ec0eb07c48fb135ea0a618d7",
+    "src": "https://github.com/conmangangqua/meta_app/releases/download/dev/famering_icon.png"
   }
 }
