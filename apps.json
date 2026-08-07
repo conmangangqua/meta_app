@@ -22,6 +22,40 @@
       "store_version": null
     },
     {
+      "id": "noxen",
+      "name": "Noxen",
+      "icon": "icons/noxen.webp",
+      "platform": "Android",
+      "description": "",
+      "features": [],
+      "downloads": {},
+      "versions": {},
+      "store": "",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
+      "store_version": null
+    },
+    {
+      "id": "noxen_browser",
+      "name": "Noxen Browser",
+      "icon": "",
+      "platform": "Android",
+      "description": "",
+      "features": [],
+      "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_browser_dev.apk"
+      },
+      "versions": {
+        "dev": "1.0.0+1"
+      },
+      "store": "",
+      "category": "Browser",
+      "category_source": "rule",
+      "store_updated": null,
+      "store_version": null
+    },
+    {
       "id": "orbitly",
       "name": "Orbitly",
       "icon": "icons/orbitly.webp",
