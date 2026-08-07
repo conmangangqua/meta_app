@@ -29,10 +29,12 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_browser_dev.apk"
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_browser_dev.apk",
+        "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/noxen_browser_prod.apk"
       },
       "versions": {
-        "dev": "1.0.0+1"
+        "dev": "1.0.0+1",
+        "prod": "1.0.0+1"
       },
       "store": "",
       "category": "Browser",
