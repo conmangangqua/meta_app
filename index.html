@@ -2910,7 +2910,12 @@
 
     // Khối admin + cảnh báo thiếu: nằm NGOÀI tab để lúc nào cũng thấy.
     var gaps=[];
-    if(!d.description||!d.listing_en) gaps.push({ep:'gendesc',t:'Store description + listing EN/VI',ic:'📝'});
+    /* Sếp 2026-08-07: tách 2 việc riêng. Gộp chung là sai — FameRing CÓ description
+       nhưng thiếu listing-en.md ⇒ cảnh báo luôn sáng, bấm nút thì bot chạy
+       /generate-store-description (chỉ gen 5 file description) rồi báo "đã xong",
+       hub vẫn kêu thiếu. Nay mỗi thứ một nút, gọi đúng workflow của nó. */
+    if(!d.description) gaps.push({ep:'gendesc',t:'Store description (app name / short / full)',ic:'📝'});
+    if(!d.listing_en)  gaps.push({ep:'genlisting',t:'Hồ sơ Play listing EN/VI (listing-en.md)',ic:'🗂️'});
     if(!d.data_safety) gaps.push({ep:'gendatasafety',t:'Data safety CSV',ic:'🛡️'});
     if(!d.privacy_url||!d.terms_url) gaps.push({ep:'genlegal',t:'Privacy Policy + Terms',ic:'⚖️'});
     if(gaps.length||!(d.screenshots&&d.screenshots.length)){
