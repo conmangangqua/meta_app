@@ -24,7 +24,7 @@
     {
       "id": "noxen",
       "name": "Noxen",
-      "icon": "icons/noxen.webp",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_icon.png",
       "platform": "Android",
       "description": "",
       "features": [],
