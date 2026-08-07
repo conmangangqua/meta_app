@@ -24,7 +24,7 @@
     {
       "id": "noxen_browser",
       "name": "Noxen Browser",
-      "icon": "",
+      "icon": "icons/noxen_browser.webp",
       "platform": "Android",
       "description": "",
       "features": [],
