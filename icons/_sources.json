@@ -10,9 +10,5 @@
   "famering": {
     "sha": "d819bfd4d24786e6865b3e813cb87dff4a535bd5ec0eb07c48fb135ea0a618d7",
     "src": "https://github.com/conmangangqua/meta_app/releases/download/dev/famering_icon.png"
-  },
-  "noxen": {
-    "sha": "0efeefa4846c0e663e806fc979feb9e8ddea27d4a7b000c3f28a1956bc16de08",
-    "src": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_icon.png"
   }
 }

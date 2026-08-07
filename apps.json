@@ -22,21 +22,6 @@
       "store_version": null
     },
     {
-      "id": "noxen",
-      "name": "Noxen",
-      "icon": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_icon.png",
-      "platform": "Android",
-      "description": "",
-      "features": [],
-      "downloads": {},
-      "versions": {},
-      "store": "",
-      "category": null,
-      "category_source": null,
-      "store_updated": null,
-      "store_version": null
-    },
-    {
       "id": "noxen_browser",
       "name": "Noxen Browser",
       "icon": "",
