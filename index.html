@@ -2997,7 +2997,11 @@
       setTimeout(function(){ all.innerHTML=old; all.disabled=false; },2000);
     };
     var when=d.exported_at?new Date(d.exported_at).toLocaleString("vi-VN"):"";
-    sub.textContent=(d.cached?"Ảnh lấy từ bản export sẵn":"Vừa export mới từ Figma")+(when?" · "+when:"");
+    /* Partner KHÔNG được thấy tên công cụ nội bộ (Figma) — chỉ admin mới đọc
+       nguồn ảnh (Sếp 2026-08-07). */
+    var nguon=(d.role==="partner")?"Bộ ảnh store hiện có"
+             :(d.cached?"Ảnh lấy từ bản export sẵn":"Vừa export mới từ Figma");
+    sub.textContent=nguon+(when?" · "+when:"");
   }
 
   // Tải 1 file lẻ. Phải đi qua API (POST + PIN) chứ không dùng <a download>:
@@ -3382,6 +3386,7 @@
       ['Đang export ảnh từ Figma (có thể mất 30-60s)…', 'Exporting images from Figma (may take 30-60s)…'],
     'Ảnh lấy từ bản export sẵn': ['Ảnh lấy từ bản export sẵn', 'Images from saved export'],
     'Vừa export mới từ Figma':   ['Vừa export mới từ Figma', 'Freshly exported from Figma'],
+    'Bộ ảnh store hiện có':      ['Bộ ảnh store hiện có', 'Current store image set'],
     'Export lại ảnh từ Figma (dùng khi vừa sửa Figma)':
       ['Export lại ảnh từ Figma (dùng khi vừa sửa Figma)', 'Re-export images from Figma (use after editing Figma)'],
     'Hồ sơ khai báo Play Console': ['Hồ sơ khai báo Play Console', 'Play Console declaration'],
@@ -3663,6 +3668,7 @@
     [/^Cấu hình · (.+)$/,                         'Config · $1'],
     [/^Ảnh lấy từ bản export sẵn · (.+)$/,        'Images from saved export · $1'],
     [/^Vừa export mới từ Figma(.*)$/,             'Freshly exported from Figma$1'],
+    [/^Bộ ảnh store hiện có(.*)$/,                'Current store image set$1'],
     [/^Screenshot \((\d+) ảnh (.+)\)$/,           'Screenshots ($1 images $2)'],
     [/^Tải (\d+) ảnh$/,                           'Download $1 images'],
     [/^Tải icon (.+)$/,                           'Download icon $1'],
