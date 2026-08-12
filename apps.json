@@ -3,7 +3,7 @@
     {
       "id": "famering",
       "name": "Famering",
-      "icon": "icons/famering.webp",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/famering_icon.png",
       "platform": "Android",
       "description": "",
       "features": [],
@@ -26,7 +26,7 @@
     {
       "id": "noxen_browser",
       "name": "Noxen Browser",
-      "icon": "icons/noxen_browser.webp",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/noxen_browser_icon.png",
       "platform": "Android",
       "description": "",
       "features": [],
@@ -49,7 +49,7 @@
     {
       "id": "orbitly",
       "name": "Orbitly",
-      "icon": "icons/orbitly.webp",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/orbitly_icon.png",
       "platform": "Android",
       "description": "",
       "features": [],
@@ -72,7 +72,7 @@
     {
       "id": "pullwave",
       "name": "Pullwave",
-      "icon": "icons/pullwave.webp",
+      "icon": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_icon.png",
       "platform": "Android",
       "description": "",
       "features": [],
@@ -82,9 +82,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/pullwave.aab"
       },
       "versions": {
-        "dev": "1.0.2+26081201",
-        "prod": "1.0.2+26081201",
-        "aab": "1.0.2+26081201"
+        "dev": "1.0.2+26081201"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
       "category": "Tools",
