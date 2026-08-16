@@ -8,12 +8,10 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/famering_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/famering_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/famering.aab"
       },
       "versions": {
-        "dev": "1.0.0+1",
         "prod": "1.0.0+1",
         "aab": "1.0.0+26081001"
       },
@@ -31,12 +29,10 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/noxen_browser_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/noxen_browser_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/noxen_browser.aab"
       },
       "versions": {
-        "dev": "1.0.0+26081001",
         "prod": "1.0.0+26081001",
         "aab": "1.0.0+26081001"
       },
@@ -54,12 +50,10 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/orbitly_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/orbitly_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/orbitly.aab"
       },
       "versions": {
-        "dev": "1.0.1+26081401",
         "prod": "1.0.1+26081401",
         "aab": "1.0.1+26081401"
       },
@@ -77,12 +71,10 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/pullwave_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/pullwave_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/pullwave.aab"
       },
       "versions": {
-        "dev": "1.0.2+26081201",
         "prod": "1.0.2+26081201",
         "aab": "1.0.2+26081201"
       },
