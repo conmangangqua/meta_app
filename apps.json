@@ -36,7 +36,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/noxen_browser.aab"
       },
       "versions": {
-        "dev": "1.0.0+26081001",
+        "dev": "1.0.1+26081701",
         "prod": "1.0.0+26081001",
         "aab": "1.0.0+26081001"
       },
