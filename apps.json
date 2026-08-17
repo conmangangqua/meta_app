@@ -40,7 +40,7 @@
         "prod": "1.0.0+26081001",
         "aab": "1.0.0+26081001"
       },
-      "store": "",
+      "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.noxen",
       "category": "Browser",
       "category_source": "rule",
       "store_updated": null,
