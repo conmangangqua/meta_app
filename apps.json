@@ -8,6 +8,7 @@
       "description": "",
       "features": [],
       "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/famering_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/famering_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/famering.aab"
       },
