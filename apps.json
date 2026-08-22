@@ -17,7 +17,7 @@
         "prod": "1.0.0+26081701",
         "aab": "1.0.0+26081701"
       },
-      "store": "",
+      "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
       "category": "Entertainment",
       "category_source": "store",
       "store_updated": null,
