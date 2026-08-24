@@ -14,7 +14,8 @@
       },
       "versions": {
         "dev": "1.0.1+26082301",
-        "prod": "1.0.1+26082301"
+        "prod": "1.0.1+26082301",
+        "aab": "1.0.0+26081701"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
       "category": "Entertainment",
@@ -71,7 +72,7 @@
     {
       "id": "pullwave",
       "name": "Pullwave",
-      "icon": "https://github.com/conmangangqua/meta_app/releases/download/dev/pullwave_icon.png",
+      "icon": "icons/pullwave.webp",
       "platform": "Android",
       "description": "",
       "features": [],
@@ -82,6 +83,7 @@
       },
       "versions": {
         "dev": "1.0.3+26082401",
+        "prod": "1.0.3+26082401",
         "aab": "1.0.2+26081201"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
