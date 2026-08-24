@@ -61,7 +61,7 @@
       "versions": {
         "dev": "1.0.1+26082001",
         "prod": "1.0.1+26082001",
-        "aab": "1.0.2+26082002"
+        "aab": "1.0.3+26082401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilpartner.orbitly",
       "category": "Maps & Navigation",
@@ -82,6 +82,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/pullwave.aab"
       },
       "versions": {
+        "dev": "1.0.2+26081201",
         "prod": "1.0.2+26081201",
         "aab": "1.0.2+26081201"
       },
