@@ -59,7 +59,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/orbitly.aab"
       },
       "versions": {
-        "dev": "1.0.1+26082001",
+        "dev": "1.0.3+26082401",
         "prod": "1.0.1+26082001",
         "aab": "1.0.3+26082401"
       },
