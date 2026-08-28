@@ -91,6 +91,25 @@
       "category_source": "store",
       "store_updated": "Aug 25, 2026",
       "store_version": null
+    },
+    {
+      "id": "wifora",
+      "name": "Wifora",
+      "icon": "icons/wifora.webp",
+      "platform": "Android",
+      "description": "",
+      "features": [],
+      "downloads": {
+        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/wifora_dev.apk"
+      },
+      "versions": {
+        "dev": "1.0.0+1"
+      },
+      "store": "",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
+      "store_version": null
     }
   ]
 }
