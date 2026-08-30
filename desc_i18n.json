@@ -14,5 +14,9 @@
  "pullwave": {
   "en": "Video downloader that pulls and saves clips from social sites to your gallery.",
   "vi": "Trình tải xuống video kéo và lưu clip từ các trang xã hội vào thư viện của bạn."
+ },
+ "wifora": {
+  "en": "WiFi analyzer: scan networks, test speed, map hotspots & share WiFi via QR code.",
+  "vi": "Trình phân tích WiFi: quét mạng, kiểm tra tốc độ, lập bản đồ các điểm nóng và chia sẻ WiFi qua mã QR."
  }
 }
