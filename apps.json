@@ -101,11 +101,13 @@
       "features": [],
       "downloads": {
         "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/wifora_dev.apk",
-        "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/wifora_prod.apk"
+        "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/wifora_prod.apk",
+        "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/wifora.aab"
       },
       "versions": {
         "dev": "1.0.0+1",
-        "prod": "1.0.0+1"
+        "prod": "1.0.0+1",
+        "aab": "1.0.0+1"
       },
       "store": "",
       "category": "network",
