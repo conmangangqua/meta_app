@@ -18,5 +18,9 @@
   "wifora": {
     "sha": "e0f5e1f39290673ca85a8e43127ff1d2b4ac2a25a43c01dc6d4626ea1f63d90e",
     "src": "https://github.com/conmangangqua/meta_app/releases/download/dev/wifora_icon.png"
+  },
+  "prismly": {
+    "sha": "fd828450f8476b8236b3c729167148caf246ce510df23301b5b196ed6bcbf23a",
+    "src": "https://github.com/conmangangqua/meta_app/releases/download/dev/prismly_icon.png"
   }
 }
