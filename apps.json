@@ -130,7 +130,7 @@
         "prod": "1.0.0+26090301",
         "aab": "1.0.0+26090301"
       },
-      "store": "",
+      "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.wifora",
       "category": "Tools",
       "category_source": "override",
       "store_updated": null,
