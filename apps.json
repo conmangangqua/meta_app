@@ -105,7 +105,7 @@
       "versions": {
         "dev": "1.0.3+26090201",
         "prod": "1.0.3+26090201",
-        "aab": "1.0.3+26090201"
+        "aab": "1.0.4+26090901"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
       "category": "Tools",
@@ -133,7 +133,7 @@
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.wifora",
       "category": "Tools",
       "category_source": "override",
-      "store_updated": null,
+      "store_updated": "Sep 4, 2026",
       "store_version": null
     }
   ]
