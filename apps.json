@@ -77,7 +77,6 @@
       "description": "",
       "features": [],
       "downloads": {
-        "dev": "https://github.com/conmangangqua/meta_app/releases/download/dev/prismly_dev.apk",
         "prod": "https://github.com/conmangangqua/meta_app/releases/download/prod/prismly_prod.apk",
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/prismly.aab"
       },
