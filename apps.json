@@ -18,9 +18,9 @@
         "aab": "1.0.3+26091801"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
-      "category": null,
-      "category_source": null,
-      "store_updated": null,
+      "category": "prank-call",
+      "category_source": "store",
+      "store_updated": "Sep 17, 2026",
       "store_version": null
     },
     {
@@ -41,9 +41,9 @@
         "aab": "1.0.1+26081902"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.noxen",
-      "category": null,
-      "category_source": null,
-      "store_updated": null,
+      "category": "browser",
+      "category_source": "store",
+      "store_updated": "Aug 19, 2026",
       "store_version": null
     },
     {
@@ -64,9 +64,9 @@
         "aab": "1.0.3+26082401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilpartner.orbitly",
-      "category": null,
-      "category_source": null,
-      "store_updated": null,
+      "category": "gps",
+      "category_source": "store",
+      "store_updated": "Sep 17, 2026",
       "store_version": null
     },
     {
@@ -87,9 +87,9 @@
         "aab": "1.0.1+26091602"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.prismly",
-      "category": null,
-      "category_source": null,
-      "store_updated": null,
+      "category": "photo-ai",
+      "category_source": "store",
+      "store_updated": "Sep 16, 2026",
       "store_version": null
     },
     {
@@ -133,9 +133,9 @@
         "aab": "1.0.1+26091401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.wifora",
-      "category": null,
-      "category_source": null,
-      "store_updated": null,
+      "category": "network",
+      "category_source": "store",
+      "store_updated": "Sep 14, 2026",
       "store_version": null
     }
   ]
