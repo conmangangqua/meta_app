@@ -15,12 +15,12 @@
       "versions": {
         "dev": "1.0.3+26091802",
         "prod": "1.0.3+26091802",
-        "aab": "1.0.2+26091701"
+        "aab": "1.0.3+26091802"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
-      "category": "Entertainment",
-      "category_source": "store",
-      "store_updated": "Sep 10, 2026",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
       "store_version": null
     },
     {
@@ -41,9 +41,9 @@
         "aab": "1.0.1+26081902"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.noxen",
-      "category": "Browser",
-      "category_source": "rule",
-      "store_updated": "Aug 19, 2026",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
       "store_version": null
     },
     {
@@ -64,9 +64,9 @@
         "aab": "1.0.3+26082401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilpartner.orbitly",
-      "category": "Maps & Navigation",
-      "category_source": "store",
-      "store_updated": "Aug 24, 2026",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
       "store_version": null
     },
     {
@@ -87,9 +87,9 @@
         "aab": "1.0.1+26091602"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.prismly",
-      "category": "Photography",
-      "category_source": "store",
-      "store_updated": "Sep 10, 2026",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
       "store_version": null
     },
     {
@@ -105,11 +105,12 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/pullwave.aab"
       },
       "versions": {
+        "dev": "1.0.3+26090201",
         "prod": "1.0.3+26090201",
         "aab": "1.0.4+26090901"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
-      "category": "Tools",
+      "category": "downloader",
       "category_source": "store",
       "store_updated": "Sep 9, 2026",
       "store_version": null
@@ -132,9 +133,9 @@
         "aab": "1.0.1+26091401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.wifora",
-      "category": "Tools",
-      "category_source": "override",
-      "store_updated": "Sep 9, 2026",
+      "category": null,
+      "category_source": null,
+      "store_updated": null,
       "store_version": null
     }
   ]
