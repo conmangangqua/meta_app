@@ -20,7 +20,7 @@
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
       "category": "prank-call",
       "category_source": "store",
-      "store_updated": "Sep 18, 2026",
+      "store_updated": "Sep 17, 2026",
       "store_version": null
     },
     {
@@ -82,7 +82,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/prismly.aab"
       },
       "versions": {
-        "dev": "1.0.1+26091801",
+        "dev": "1.0.1+26091802",
         "prod": "1.0.1+26091801",
         "aab": "1.0.1+26091802"
       },
