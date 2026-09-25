@@ -18,7 +18,7 @@
         "aab": "1.0.3+26092301"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
-      "category": "prank-call",
+      "category": "Entertainment",
       "category_source": "store",
       "store_updated": "Sep 22, 2026",
       "store_version": null
@@ -41,8 +41,8 @@
         "aab": "1.0.1+26081902"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.noxen",
-      "category": "browser",
-      "category_source": "store",
+      "category": "Browser",
+      "category_source": "rule",
       "store_updated": "Aug 20, 2026",
       "store_version": null
     },
@@ -64,7 +64,7 @@
         "aab": "1.0.3+26082401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilpartner.orbitly",
-      "category": "gps",
+      "category": "Maps & Navigation",
       "category_source": "store",
       "store_updated": "Sep 17, 2026",
       "store_version": null
@@ -87,7 +87,7 @@
         "aab": "1.0.1+26091901"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.prismly",
-      "category": "photo-ai",
+      "category": "Photography",
       "category_source": "store",
       "store_updated": "Sep 20, 2026",
       "store_version": null
@@ -110,7 +110,7 @@
         "aab": "1.0.4+26090901"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
-      "category": "downloader",
+      "category": "Tools",
       "category_source": "store",
       "store_updated": "Sep 10, 2026",
       "store_version": null
@@ -133,8 +133,8 @@
         "aab": "1.0.1+26091401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.wifora",
-      "category": "network",
-      "category_source": "store",
+      "category": "Tools",
+      "category_source": "override",
       "store_updated": "Sep 14, 2026",
       "store_version": null
     }
