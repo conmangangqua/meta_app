@@ -88,7 +88,7 @@
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.prismly",
       "category": "Photography",
-      "category_source": "gitlab",
+      "category_source": "store",
       "store_updated": "Sep 20, 2026",
       "store_version": null
     },
