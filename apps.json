@@ -20,7 +20,7 @@
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.famering",
       "category": "Entertainment",
       "category_source": "store",
-      "store_updated": "Sep 22, 2026",
+      "store_updated": "Sep 30, 2026",
       "store_version": null
     },
     {
@@ -83,7 +83,7 @@
       },
       "versions": {
         "dev": "1.0.3+26093001",
-        "prod": "1.0.3+26092902",
+        "prod": "1.0.3+26093001",
         "aab": "1.0.3+26093001"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.prismly",
