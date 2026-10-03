@@ -83,7 +83,7 @@
       },
       "versions": {
         "dev": "1.0.3+26100301",
-        "prod": "1.0.3+26093001",
+        "prod": "1.0.3+26100301",
         "aab": "1.0.3+26093001"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquiltmt.prismly",
