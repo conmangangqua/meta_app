@@ -107,7 +107,7 @@
       "versions": {
         "dev": "1.0.4+26090901",
         "prod": "1.0.4+26090901",
-        "aab": "1.0.4+26090901"
+        "aab": "1.0.4+26100401"
       },
       "store": "https://play.google.com/store/apps/details?id=com.tranquilmind.pullwave",
       "category": "Tools",
