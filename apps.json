@@ -19,7 +19,7 @@
       },
       "store": "",
       "category": "Entertainment",
-      "category_source": "store",
+      "category_source": "gitlab",
       "store_updated": null,
       "store_version": null
     },
@@ -65,7 +65,7 @@
       },
       "store": "",
       "category": "Maps & Navigation",
-      "category_source": "store",
+      "category_source": "gitlab",
       "store_updated": null,
       "store_version": null
     },
@@ -88,7 +88,7 @@
       },
       "store": "",
       "category": "Photography",
-      "category_source": "store",
+      "category_source": "gitlab",
       "store_updated": null,
       "store_version": null
     },
@@ -110,8 +110,8 @@
         "aab": "1.0.4+26100401"
       },
       "store": "",
-      "category": "Tools",
-      "category_source": "store",
+      "category": "Downloader",
+      "category_source": "gitlab",
       "store_updated": null,
       "store_version": null
     },
