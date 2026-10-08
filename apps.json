@@ -128,7 +128,7 @@
         "aab": "https://github.com/conmangangqua/meta_app/releases/download/aab/wifora.aab"
       },
       "versions": {
-        "dev": "1.0.1+26091401",
+        "dev": "1.0.2+26100401",
         "prod": "1.0.1+26091401",
         "aab": "1.0.2+26100401"
       },
