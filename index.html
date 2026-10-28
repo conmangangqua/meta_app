@@ -112,7 +112,23 @@
     .pill-category i, .pill-category svg { width: 11px; height: 11px; stroke-width: 2.4; }
     /* badge-row phải WRAP để pill category KHÔNG đẩy ads/health badge ra ngoài (overflow:hidden cắt mất) */
     .badge-row { flex-wrap: wrap !important; overflow: visible !important; row-gap: 8px; }
-  </style>
+  
+  /* HUB_LOADING (Sếp 28/10/2026: "thay text đang tải bằng cái loading gì cho đẹp hơn, sửa ở tất cả các chỗ").
+     hubSkel(kiểu) = khung xương có ánh chạy, đúng hình nội dung sắp hiện; hubBusy(el, chữ) = vòng quay màu thương hiệu
+     + chữ ngắn cho dòng trạng thái/nút. Giảm chuyển động ⇒ đứng yên. */
+  .hub-spin{display:inline-block;flex:none;width:1em;height:1em;border-radius:50%;vertical-align:-.16em;margin-right:.5em;
+    border:2px solid color-mix(in srgb,var(--primary,#0f6e56) 20%,transparent);border-top-color:var(--primary,#0f6e56);
+    animation:hubSpin .7s linear infinite}
+  .hub-sk{display:grid;gap:12px;padding:6px 0}
+  .hub-sk i{display:block;border-radius:12px;min-height:14px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--primary,#0f6e56) 7%,#eef2f1) 25%,#f8faf9 40%,color-mix(in srgb,var(--primary,#0f6e56) 7%,#eef2f1) 60%);
+    background-size:300% 100%;animation:hubShine 1.25s ease-in-out infinite}
+  .hub-sk .r{display:flex;gap:14px;align-items:center}
+  .hub-sk .g{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px}
+  @keyframes hubSpin{to{transform:rotate(360deg)}}
+  @keyframes hubShine{0%{background-position:100% 0}100%{background-position:0 0}}
+  @media (prefers-reduced-motion:reduce){.hub-spin,.hub-sk i{animation:none}}
+</style>
   <style>/* AAB_TRIGGER_INJECTED */
     /* Sếp 2026-07-29: 2 nút build vốn để đen #0f172a + nâu #b45309, chẳng liên
      quan primary nên nhìn lạc khỏi cả trang. Nay cùng một hệ, phân biệt bằng
@@ -448,6 +464,19 @@
 <style>/* PIN_MASK: ô PIN là type="text" che ký tự bằng CSS. Trang còn ô kiểu mật khẩu thì trình quản lý mật khẩu của trình duyệt coi ô text đầu trang (ô tìm kiếm) là ô tên đăng nhập và bật gợi ý mật khẩu mỗi lần chạm vào. */input[data-pin]{-webkit-text-security:disc}input[data-pin].pin-show{-webkit-text-security:none}</style>
 </head>
 <body>
+<script>/* HUB_LOADING helpers — xem CSS cùng tên. */
+window.hubSkel=function(kieu){
+  var i=function(w,h,r){return '<i style="width:'+w+';height:'+h+'px'+(r?';border-radius:'+r:'')+'"></i>';};
+  var h;
+  if(kieu==="kit") h='<div class="r">'+i("112px",112,"26px")+'<div style="flex:1;display:grid;gap:10px">'+i("46%",18)+i("70%",14)+i("34%",14)+'</div></div>'
+    +'<div class="g">'+[0,1,2,3,4,5].map(function(){return i("100%",170,"16px");}).join("")+'</div>';
+  else if(kieu==="grid") h='<div class="g">'+[0,1,2,3,4,5].map(function(){return i("100%",170,"16px");}).join("")+'</div>';
+  else h=i("38%",16)+i("100%",44,"12px")+i("100%",44,"12px")+i("100%",110,"12px");
+  return '<div class="hub-sk" role="status" aria-label="Đang tải">'+h+'</div>';
+};
+window.hubBusy=function(el,chu){ if(!el) return; el.innerHTML='<span class="hub-spin" aria-hidden="true"></span>'; el.appendChild(document.createTextNode(chu||"")); };
+</script>
+
 <script>/* HUB_ERR_TEXT — dịch lỗi kỹ thuật sang câu người đọc hiểu được.
    Sếp bắt 2026-09-10: popup Gói phát hành chỉ hiện "Load failed" — chữ của
    trình duyệt khi fetch chết giữa chừng, không nói vì sao, nên Sếp phải đi hỏi
@@ -1055,7 +1084,7 @@ window.hubErrText = function (e) {
       $("bmApp").textContent = appName + " — kích build từ xa";
       $("bmName").value = ""; $("bmCode").value = ""; $("bmPin").value = "";
       $("bmStatus").style.color = "#64748b";
-      $("bmStatus").textContent = "Đang lấy version hiện tại...";
+      hubBusy($("bmStatus"),"Đang lấy version hiện tại...");
       $("bmOk").disabled = true;
       $("buildModal").classList.add("open");
       try {
@@ -1085,7 +1114,7 @@ window.hubErrText = function (e) {
       }
       $("bmOk").disabled = true;
       $("bmStatus").style.color = "#64748b";
-      $("bmStatus").textContent = "⏳ Đang kích build...";
+      hubBusy($("bmStatus"), "Đang kích build...");
       try {
         const r = await fetch(BUILD_API + "/api/build", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         const d = await r.json();
@@ -1188,7 +1217,7 @@ window.hubErrText = function (e) {
       if (!payload.pin) { $("pmStatus").style.color = "#ef4444"; $("pmStatus").textContent = "⚠️ Nhập mã PIN."; return; }
       $("pmOk").disabled = true;
       $("pmStatus").style.color = "var(--text-muted)";
-      $("pmStatus").textContent = pmAction === "review" ? "⏳ Đang gửi review..." : "⏳ Đang kích đẩy internal...";
+      $("pmStatus").textContent = pmAction === "review" ? "Đang gửi review..." : "Đang kích đẩy internal...";
       try {
         const r = await fetch(`${BUILD_API}/api/play`, {
           method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
@@ -1250,7 +1279,7 @@ window.hubErrText = function (e) {
       }
       $("naOk").disabled = true;
       $("naStatus").style.color = "var(--text-muted)";
-      $("naStatus").textContent = "⏳ Đang kích build No-Ads...";
+      hubBusy($("naStatus"), "Đang kích build No-Ads...");
       try {
         const r = await fetch(`${BUILD_API}/api/build`, {
           method: "POST",
@@ -1350,7 +1379,7 @@ window.hubErrText = function (e) {
     ok.onclick=async function(){
       var v=(pin.value||"").trim();
       if(!v){ msg.style.color="#b91c1c"; msg.textContent="Nhập PIN."; return; }
-      ok.disabled=true; msg.style.color="#64748b"; msg.textContent="Đang kiểm tra...";
+      ok.disabled=true; msg.style.color="#64748b"; hubBusy(msg,"Đang kiểm tra...");
       try{
         var r=await fetch(API+"/api/auth",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:v})});
         var d=await r.json();
@@ -1481,7 +1510,7 @@ window.hubErrText = function (e) {
     <h3><i data-lucide="file-text" style="width:20px;height:20px;vertical-align:-4px;margin-right:8px"></i>Hồ sơ Store</h3>
     <p class="s" id="vdApp"></p>
     <p class="s" id="vdPlat" style="font-size:.75rem;color:var(--primary-strong,var(--primary,#334155));font-weight:700;margin:-6px 0 8px"></p>
-    <div id="vdFields">Đang tải…</div>
+    <div id="vdFields"><script>document.write(hubSkel("rows"))</script></div>
     <input id="vdPin" type="text" data-pin="1" inputmode="numeric" placeholder="Nhập PIN để Gen lại" autocomplete="off">
     <div id="vdMsg"></div>
     <div id="vdAct">
@@ -1697,7 +1726,7 @@ window.hubErrText = function (e) {
       platEl.textContent="";
       fieldsEl.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:14px">'+
         '<div class="vd-spin"></div>'+
-        '<div style="color:var(--primary-strong,var(--primary,#334155));font-weight:700;font-size:.92rem">Đang tải mô tả từ GitHub…</div>'+
+        hubSkel("rows")+
         '<div style="color:#64748b;font-size:.78rem">Đang kiểm tra Privacy/Terms URL…</div>'+
         '</div>';
       gb.disabled=true;
@@ -1758,7 +1787,7 @@ window.hubErrText = function (e) {
             seenRunning = true;
             var mins = Math.floor(d.elapsed_sec/60), secs = d.elapsed_sec%60;
             msg.style.color="var(--primary,#334155)";
-            msg.textContent = "⏳ Đang gen ("+(mins?mins+"m"+(secs<10?"0":""):"")+secs+"s)…";
+            hubBusy(msg, "Đang gen ("+(mins?mins+"m"+(secs<10?"0":""):"")+secs+"s)…");
             gb.disabled = true;
           } else if(d && d.ok && !d.running && seenRunning){
             // job gen VỪA xong (trước đó đã thấy running) → reload 1 lần rồi dừng poll
@@ -1790,7 +1819,7 @@ window.hubErrText = function (e) {
       document.getElementById("rnApp").textContent=nm;
       document.getElementById("rnPin").value="";
       document.getElementById("rnMsg").textContent="";
-      document.getElementById("rnBody").innerHTML='<div class="rn-empty"><div class="vd-spin" style="margin:0 auto 12px"></div><div class="d">Đang tải bản đã lưu…</div></div>';
+      document.getElementById("rnBody").innerHTML=hubSkel("rows");
       document.getElementById("rnOv").style.display="flex";
       var gb=document.getElementById("rnGenBtn"), loaded=false;
       try{
@@ -1807,7 +1836,7 @@ window.hubErrText = function (e) {
       var pin=(document.getElementById("rnPin").value||"").trim();
       var msg=document.getElementById("rnMsg"), btn=document.getElementById("rnGenBtn");
       if(!pin){ msg.style.color="#b91c1c"; msg.textContent="Nhập PIN."; return; }
-      btn.disabled=true; msg.style.color="#64748b"; msg.textContent="⏳ Đọc commit + tạo (~1-2 phút, Claude)…";
+      btn.disabled=true; msg.style.color="#64748b"; hubBusy(msg, "Đọc commit + tạo (~1-2 phút, Claude)…");
       var tunnel=null;
       try{ tunnel=await resolveGenDesc(); }catch(_){ tunnel=null; }
       if(!tunnel){ msg.style.color="#b91c1c"; msg.textContent="❌ Daemon (com.tmt.gendesc) đang tắt — bật lại rồi thử."; btn.disabled=false; return; }
@@ -1838,7 +1867,7 @@ window.hubErrText = function (e) {
     }
     // Đường cũ (Vercel Groq) — fallback khi daemon Claude tắt / không với tới
     async function vdGenFallback(v){
-      msg.style.color="#64748b"; msg.textContent="⏳ Đang kích gen (cloud fallback)…";
+      msg.style.color="#64748b"; hubBusy(msg, "Đang kích gen (cloud fallback)…");
       var r=await fetch(API+"/api/gendesc",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app_id:appId,pin:v})});
       var d=await r.json();
       if(!r.ok||!d.ok) throw new Error(d.error||"Thất bại");
@@ -1848,7 +1877,7 @@ window.hubErrText = function (e) {
     window.vdGen=async function(){
       var v=(pin.value||"").trim();
       if(!v){ msg.style.color="#b91c1c"; msg.textContent="Nhập PIN để giao AI làm."; return; }
-      gb.disabled=true; msg.style.color="#64748b"; msg.textContent="⏳ Đang gửi thông báo…";
+      gb.disabled=true; msg.style.color="#64748b"; hubBusy(msg, "Đang gửi thông báo…");
       try{
         var r=await fetch(API+"/api/gendesc",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app_id:appId,pin:v})});
         var d=await r.json();
@@ -1862,7 +1891,7 @@ window.hubErrText = function (e) {
       var v=(pin.value||"").trim();
       if(!v){ msg.style.color="#b91c1c"; msg.textContent="Nhập PIN để Gen Privacy/Terms."; return; }
       var lb=document.getElementById("vdGenLegalBtn");
-      lb.disabled=true; msg.style.color="#64748b"; msg.textContent="⏳ Đang kích gen Privacy/Terms…";
+      lb.disabled=true; msg.style.color="#64748b"; hubBusy(msg, "Đang kích gen Privacy/Terms…");
       try{
         var r=await fetch(API+"/api/genlegal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app_id:appId,pin:v})});
         var d=await r.json();
@@ -1966,7 +1995,7 @@ window.hubErrText = function (e) {
   <script>(function(){
     var API="https://aab.tranquilmind.co";
     window.dlAssets=async function(id,nm,btn){
-      var old=btn.innerHTML; btn.disabled=true; btn.innerHTML="⏳ Đang tải asset…";
+      var old=btn.innerHTML; btn.disabled=true; btn.innerHTML="Đang tải asset…";
       try{
         var r=await fetch(API+"/api/assets?app_id="+encodeURIComponent(id));
         if(!r.ok){ var e={}; try{e=await r.json();}catch(_){} throw new Error(e.error||("HTTP "+r.status)); }
@@ -2032,7 +2061,7 @@ window.hubErrText = function (e) {
       appEl.textContent=nm+" — dán link store";
       urlIn.value=""; pinIn.value=""; msg.textContent="";
       msg.style.color="#64748b";
-      msg.textContent="⏳ Đang dò package…";
+      hubBusy(msg, "Đang dò package…");
       document.getElementById('stOv').classList.add('open');
       try{
         var r=await fetch("https://aab.tranquilmind.co/api/package?app_id="+encodeURIComponent(id));
@@ -2059,7 +2088,7 @@ window.hubErrText = function (e) {
     window.stSubmit=async function(){
       var url=document.getElementById('stUrl').value.trim(), pin=document.getElementById('stPin').value.trim(), msg=document.getElementById('stMsg'), ok=document.getElementById('stOk');
       if(!url||!pin){ msg.style.color='#b91c1c'; msg.textContent='Điền link và PIN.'; return; }
-      ok.disabled=true; msg.style.color='#64748b'; msg.textContent='⏳ Đang lưu...';
+      ok.disabled=true; msg.style.color='#64748b'; hubBusy(msg, 'Đang lưu...');
       try{
         var r=await fetch(API+"/api/store",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({repo:repo(),app_id:appId,url:url,pin:pin})});
         var d=await r.json();
@@ -2114,7 +2143,7 @@ window.hubErrText = function (e) {
       throw new Error("máy chụp đang off");
     }
     async function loadGallery(id){
-      grid.innerHTML='<div style="color:#64748b;grid-column:1/-1;text-align:center;padding:24px">Đang tải…</div>';
+      grid.innerHTML='<div style="grid-column:1/-1">'+hubSkel("grid")+'</div>';
       try{
         var d=await (await fetch(API+"/api/screenshots?app_id="+encodeURIComponent(id),{cache:"no-store"})).json();
         var items=(d&&d.screens)||[];
@@ -2139,7 +2168,7 @@ window.hubErrText = function (e) {
           if(d && d.ok && d.running && d.slug === slug){
             var mins = Math.floor(d.elapsed_sec/60), secs = d.elapsed_sec%60;
             msg.style.color="var(--primary,#334155)";
-            msg.textContent = "⏳ Đang chụp ("+(mins?mins+"m"+(secs<10?"0":""):"")+secs+"s)…";
+            hubBusy(msg, "Đang chụp ("+(mins?mins+"m"+(secs<10?"0":""):"")+secs+"s)…");
             gb.disabled = true;
           } else if(d && d.ok && !d.running && gb.disabled){
             msg.textContent=""; gb.disabled=false;
@@ -2166,7 +2195,7 @@ window.hubErrText = function (e) {
     window.ssGen=async function(){
       var v=(pin.value||"").trim();
       if(!v){ msg.style.color="#b91c1c"; msg.textContent="Nhập PIN để Gen lại."; return; }
-      gb.disabled=true; msg.style.color="#64748b"; msg.textContent="⏳ Đang chụp (~5-15 phút, build harness + capture)…";
+      gb.disabled=true; msg.style.color="#64748b"; hubBusy(msg, "Đang chụp (~5-15 phút, build harness + capture)…");
       try{
         var t=await resolveTunnel();
         var r=await fetch(t+"/genshots",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({slug:slug,pin:v})});
@@ -2185,7 +2214,7 @@ window.hubErrText = function (e) {
       var dlBtn = document.getElementById("ssDlBtn");
       dlBtn.disabled = true;
       var total = imgs.length, done = 0;
-      msg.style.color="#64748b"; msg.textContent="⏳ Đang tải "+total+" ảnh…";
+      msg.style.color="#64748b"; hubBusy(msg, "Đang tải "+total+" ảnh…");
       for(var i=0;i<imgs.length;i++){
         try{
           var src = imgs[i].src;
@@ -2200,7 +2229,7 @@ window.hubErrText = function (e) {
           document.body.appendChild(a); a.click(); a.remove();
           URL.revokeObjectURL(url);
           done++;
-          msg.textContent="⏳ Đã tải "+done+"/"+total+"…";
+          hubBusy(msg, "Đã tải "+done+"/"+total+"…");
           // Delay giữa các download để Chrome không gộp prompt
           await new Promise(function(res){ setTimeout(res, 250); });
         }catch(e){ /* ignore single fail */ }
@@ -2475,7 +2504,7 @@ window.hubErrText = function (e) {
         if (v && v !== was) fields[k] = v;
       });
       if (!Object.keys(fields).length){ msg.innerHTML = '<span style="color:#b45309">⚠ Chưa thay đổi giá trị nào</span>'; return; }
-      btn.disabled = true; msg.innerHTML = '⏳ Đang kích pipeline...';
+      btn.disabled = true; msg.innerHTML = 'Đang kích pipeline...';
       try {
         var r = await fetch(CFG_API + "/api/configsave", {
           method:"POST", headers:{"Content-Type":"application/json"},
@@ -2504,7 +2533,7 @@ window.hubErrText = function (e) {
       if (!v){ msg.style.color="#b91c1c"; msg.textContent="⚠ Trống"; return; }
       if (v === orig){ msg.style.color="#b45309"; msg.textContent="⚠ Chưa đổi"; return; }
       if (!confirm("Ghi giá trị MỚI lên Firebase Remote Config:\n\n"+param+"."+key+" = "+v+"\n\n(Ảnh hưởng app production NGAY khi app fetch RC). Tiếp tục?")) return;
-      btn.disabled = true; msg.style.color="color-mix(in srgb,var(--primary,#334155) 85%,#000)"; msg.textContent="⏳ Đang ghi Firebase...";
+      btn.disabled = true; msg.style.color="color-mix(in srgb,var(--primary,#334155) 85%,#000)"; hubBusy(msg, "Đang ghi Firebase...");
       try {
         var r = await fetch(CFG_API + "/api/rcsave", {
           method:"POST", headers:{"Content-Type":"application/json"},
@@ -2541,7 +2570,7 @@ window.hubErrText = function (e) {
       if((p.valueType||"")==="JSON"){ try{ JSON.parse(v); }catch(e){ msg.style.color="#b91c1c"; msg.textContent="❌ JSON không hợp lệ"; return; } }
       if(v === rcPretty(p.value)){ msg.style.color="#b45309"; msg.textContent="⚠ Chưa đổi giá trị"; return; }
       if(!confirm('Ghi tham số "'+p.key+'" lên Firebase Remote Config?\n\nẢnh hưởng app production NGAY khi app fetch RC. Tiếp tục?')) return;
-      msg.style.color="color-mix(in srgb,var(--primary,#334155) 85%,#000)"; msg.textContent="⏳ Đang ghi Firebase...";
+      msg.style.color="color-mix(in srgb,var(--primary,#334155) 85%,#000)"; hubBusy(msg, "Đang ghi Firebase...");
       try{
         var r = await fetch(CFG_API+"/api/rcsave",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app_id:cfgAppId, param:p.key, value:v, pin:pin})});
         var d = await r.json();
@@ -2558,7 +2587,7 @@ window.hubErrText = function (e) {
       var msg = document.getElementById("cfgAddMsg");
       var btn = document.getElementById("cfgAddBtn");
       if (!pin){ msg.innerHTML = '<span style="color:#b91c1c">⚠ Nhập PIN</span>'; return; }
-      btn.disabled = true; msg.innerHTML = '⏳ Đang kích pipeline...';
+      btn.disabled = true; msg.innerHTML = 'Đang kích pipeline...';
       try {
         var r = await fetch(CFG_API + "/api/sdkadd", {
           method:"POST", headers:{"Content-Type":"application/json"},
@@ -2723,7 +2752,7 @@ window.hubErrText = function (e) {
     var pinEl=document.getElementById("dsPin");
     var pin=pinEl?(pinEl.value||"").trim():"";
     if(!pin){ if(pinEl){pinEl.focus();pinEl.style.borderColor="#ef4444";} return; }
-    body.innerHTML='<div class="spin"></div><div class="sub" style="text-align:center">Đang gửi thông báo…</div>';
+    body.innerHTML=hubSkel("rows");
     try{
       var r=await fetch(DS_API+"/api/gendatasafety",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app_id:lastApp,pin:pin})});
       var d=await r.json();
@@ -3202,7 +3231,7 @@ window.hubErrText = function (e) {
     });
     body.querySelectorAll("[data-gen]").forEach(function(b){
       b.onclick=async function(){
-        var old=b.innerHTML; b.disabled=true; b.textContent="Đang gửi…";
+        var old=b.innerHTML; b.disabled=true; hubBusy(b,"Đang gửi…");
         st.style.color="#64748b"; st.textContent="";
         try{
           var r=await fetch(API+"/api/"+b.dataset.gen,{
@@ -3242,7 +3271,7 @@ window.hubErrText = function (e) {
       var n=(d.screenshots||[]).length, old=all.innerHTML;
       all.disabled=true;
       for(var i=1;i<=n;i++){
-        all.textContent="⏳ "+i+"/"+n;
+        hubBusy(all, ""+i+"/"+n);
         try{ await grabFile("screenshot", i); }catch(e){ /* lỗi từng ảnh đã báo ở st */ }
       }
       all.textContent="✅ Đã tải "+n+" ảnh";
@@ -3275,7 +3304,7 @@ window.hubErrText = function (e) {
 
   async function grabOne(btn, file, i){
     var old=btn.innerHTML;
-    btn.disabled=true; btn.textContent="Đang tải…";
+    btn.disabled=true; hubBusy(btn,"Đang tải…");
     st.style.color="#64748b"; st.textContent="";
     try{
       await grabFile(file, i);
@@ -3290,8 +3319,8 @@ window.hubErrText = function (e) {
     // bấm vào không biết đang tải cái gì (Sếp report 2026-07-28).
     rf.disabled=true;
     st.style.color="#64748b";
-    st.textContent=refresh?"Đang export ảnh từ Figma (có thể mất 30-60s)…":"Đang tải dữ liệu gói…";
-    body.innerHTML='<div class="rk-sec">Đang tải…</div>';
+    if(refresh) hubBusy(st,"Đang xuất ảnh từ Figma…"); else st.textContent="";
+    body.innerHTML=hubSkel("kit");
     try{
       /* Có hạn chờ RÕ RÀNG. Trước đây không có: request nào chạy quá lâu thì
          trình duyệt tự cắt và ném "Load failed" — không ai biết vì sao (Sếp bắt
@@ -3683,23 +3712,23 @@ window.hubErrText = function (e) {
     '⚠️ Nhập mã PIN.':       ['⚠️ Nhập mã PIN.', '⚠️ Enter the PIN.'],
     '⚠️ Điền đủ Version Name, Code và PIN.':
       ['⚠️ Điền đủ Version Name, Code và PIN.', '⚠️ Fill in Version Name, Code and PIN.'],
-    '⏳ Đang kích build...': ['⏳ Đang kích build...', '⏳ Triggering build...'],
-    '⏳ Đang kích build No-Ads...': ['⏳ Đang kích build No-Ads...', '⏳ Triggering No-Ads build...'],
-    '⏳ Đang kích pipeline...': ['⏳ Đang kích pipeline...', '⏳ Triggering pipeline...'],
-    '⏳ Đang ghi Firebase...': ['⏳ Đang ghi Firebase...', '⏳ Writing to Firebase...'],
-    '⏳ Đang lưu...':        ['⏳ Đang lưu...', '⏳ Saving...'],
-    '⏳ Đang dò package…':   ['⏳ Đang dò package…', '⏳ Detecting package…'],
-    '⏳ Đang tải asset…':    ['⏳ Đang tải asset…', '⏳ Downloading assets…'],
-    '⏳ Đang gửi thông báo…': ['⏳ Đang gửi thông báo…', '⏳ Sending notification…'],
-    '⏳ Đang kích gen Privacy/Terms…': ['⏳ Đang kích gen Privacy/Terms…', '⏳ Triggering Privacy/Terms generation…'],
-    '⏳ Đang kích gen (cloud fallback)…': ['⏳ Đang kích gen (cloud fallback)…', '⏳ Triggering generation (cloud fallback)…'],
-    '⏳ Đọc commit + tạo (~1-2 phút, Claude)…':
-      ['⏳ Đọc commit + tạo (~1-2 phút, Claude)…', '⏳ Reading commits + generating (~1-2 min, Claude)…'],
-    '⏳ Đang chụp (~5-15 phút, build harness + capture)…':
-      ['⏳ Đang chụp (~5-15 phút, build harness + capture)…', '⏳ Capturing (~5-15 min, build harness + capture)…'],
-    '⏳ Đang gen (~8-12 phút, Claude Sonnet 4.6 qua local daemon)…':
-      ['⏳ Đang gen (~8-12 phút, Claude Sonnet 4.6 qua local daemon)…',
-       '⏳ Generating (~8-12 min, Claude Sonnet 4.6 via local daemon)…'],
+    'Đang kích build...': ['Đang kích build...', 'Triggering build...'],
+    'Đang kích build No-Ads...': ['Đang kích build No-Ads...', 'Triggering No-Ads build...'],
+    'Đang kích pipeline...': ['Đang kích pipeline...', 'Triggering pipeline...'],
+    'Đang ghi Firebase...': ['Đang ghi Firebase...', 'Writing to Firebase...'],
+    'Đang lưu...':        ['Đang lưu...', 'Saving...'],
+    'Đang dò package…':   ['Đang dò package…', 'Detecting package…'],
+    'Đang tải asset…':    ['Đang tải asset…', 'Downloading assets…'],
+    'Đang gửi thông báo…': ['Đang gửi thông báo…', 'Sending notification…'],
+    'Đang kích gen Privacy/Terms…': ['Đang kích gen Privacy/Terms…', 'Triggering Privacy/Terms generation…'],
+    'Đang kích gen (cloud fallback)…': ['Đang kích gen (cloud fallback)…', 'Triggering generation (cloud fallback)…'],
+    'Đọc commit + tạo (~1-2 phút, Claude)…':
+      ['Đọc commit + tạo (~1-2 phút, Claude)…', 'Reading commits + generating (~1-2 min, Claude)…'],
+    'Đang chụp (~5-15 phút, build harness + capture)…':
+      ['Đang chụp (~5-15 phút, build harness + capture)…', 'Capturing (~5-15 min, build harness + capture)…'],
+    'Đang gen (~8-12 phút, Claude Sonnet 4.6 qua local daemon)…':
+      ['Đang gen (~8-12 phút, Claude Sonnet 4.6 qua local daemon)…',
+       'Generating (~8-12 min, Claude Sonnet 4.6 via local daemon)…'],
     '❌ Daemon (com.tmt.gendesc) đang tắt — bật lại rồi thử.':
       ['❌ Daemon (com.tmt.gendesc) đang tắt — bật lại rồi thử.',
        '❌ Daemon (com.tmt.gendesc) is off — start it and try again.'],
@@ -3972,9 +4001,9 @@ window.hubErrText = function (e) {
     [/^\u2713 Auto-suggest từ package: (.+)$/,     '\u2713 Auto-suggested from package: $1'],
     [/^Data safety — (\d+) data-type$/,           'Data safety — $1 data types'],
     [/^· sửa giá trị rồi Save → build dev\+prod\.$/, '· edit the value then Save → build dev+prod.'],
-    [/^⏳ Đang gen \((.+)\)$/,               '⏳ Generating ($1)'],
-    [/^⏳ Đang chụp \((.+)\)$/,              '⏳ Capturing ($1)'],
-    [/^⏳ Đang tải (\d+) ảnh…$/,             '⏳ Downloading $1 images…'],
+    [/^Đang gen \((.+)\)$/,               'Generating ($1)'],
+    [/^Đang chụp \((.+)\)$/,              'Capturing ($1)'],
+    [/^Đang tải (\d+) ảnh…$/,             'Downloading $1 images…'],
     [/^✅ Đã tải (\d+) ảnh\.$/,               '✅ Downloaded $1 images.'],
     [/^✅ Đã tải (.*)$/,                     '✅ Downloaded $1'],
     [/^⬇️ Đã tải (.*)$/,                     '⬇️ Downloaded $1'],
@@ -3996,7 +4025,7 @@ window.hubErrText = function (e) {
     [/^🔒 Device đang chụp '(.+)' \((\d+)s\) — chờ xong rồi mới Gen được\.$/,
                                             "🔒 Device is capturing '$1' ($2s) — wait for it to finish before generating."],
     [/^✅ Chụp xong (\d+) màn \((.+)$/,       '✅ Captured $1 screens ($2'],
-    [/^⏳ Đã tải (.+)$/,                      '⏳ Downloaded $1'],
+    [/^Đã tải (.+)$/,                      'Downloaded $1'],
     [/^⬇️ Đã tải (\d+) asset của (.+)$/,      '⬇️ Downloaded $1 assets of $2'],
     [/^Ghi giá trị MỚI lên Firebase Remote Config:(.*)$/,
                                             'Write the NEW value to Firebase Remote Config:$1'],
