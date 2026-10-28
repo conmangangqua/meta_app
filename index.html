@@ -2855,6 +2855,8 @@ window.hubErrText = function (e) {
   .rk-fv.mono{font:600 .8rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;color:#334155;word-break:break-all}
   /* Khối "nhắc bot gen": CHỈ admin (build PIN) — 3 endpoint gen đều gate BUILD_PIN. */
   body.aab-authed:not(.partner-authed) .rk-miss{display:none}
+  /* Nút xuất lại ảnh từ Figma đã bỏ: ảnh tự xuất khi mở popup (Sếp 28/10/2026). `hidden` bị .rk-rf{display} đè ⇒ ẩn bằng id. */
+  #rkRf{display:none!important}
   .rk-admin{display:none;margin-top:18px;border-top:1px dashed #e2e8f0;padding-top:10px}
   body.aab-authed:not(.partner-authed) .rk-admin{display:block}
   .rk-gap{display:flex;align-items:center;justify-content:space-between;gap:12px;
