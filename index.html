@@ -2928,7 +2928,7 @@ window.hubErrText = function (e) {
 
   function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
   function mb(n){return (n/1048576).toFixed(1)+" MB";}
-  function close(){ov.classList.remove("open");st.textContent="";body.innerHTML="";}
+  function close(){clearTimeout(rkHen);ov.classList.remove("open");st.textContent="";body.innerHTML="";}
   cl.onclick=close;
   ov.addEventListener("click",function(e){if(e.target===ov)close();});
 
@@ -3008,6 +3008,30 @@ window.hubErrText = function (e) {
   /* RK_LISTING_MD: popup "Hồ sơ Store" (IIFE khác) cũng cần render bảng listing
      y như tab Listing → expose renderer ra global dùng chung, khỏi viết lại. */
   window.__mdToHtml = mdToHtml;
+  /* RK_TRANG_THAI: popup tự hiện tiến độ việc "Giao AI làm" + hàng đợi ảnh Store, hỏi lại mỗi phút, việc xong thì tự
+     nạp lại — Sếp 28/10/2026: "hiện ntn thì biết bao giờ gen xong??? phải reload liên tục à". Server: /api/genstatus. */
+  var rkHen=null;
+  function rkTheoDoi(d, canTheoDoi){
+    clearTimeout(rkHen); rkHen=null;
+    if(!canTheoDoi) return;
+    var id=cur.id, coAnh=!(d.screenshots&&d.screenshots.length);
+    fetch(API+"/api/genstatus?app_id="+encodeURIComponent(id)+(coAnh?"&anh=1":"")).then(function(r){ return r.json(); }).then(function(j){
+      if(!j||!j.ok||cur.id!==id||!ov.classList.contains("open")) return;
+      var conCho=false, coXong=false;
+      body.querySelectorAll("[data-gen]").forEach(function(b){
+        var s=j.ai&&j.ai[b.dataset.gen], tag=b.parentNode.querySelector(".rk-tt");
+        if(!s||!s.tt){ if(tag) tag.remove(); b.style.display=""; return; }
+        if(!tag){ tag=document.createElement("span"); tag.className="rk-meta rk-tt"; b.parentNode.insertBefore(tag,b); }
+        tag.textContent=s.nhan;
+        b.style.display=s.giao_lai?"":"none";
+        if(s.xong) coXong=true; else if(!s.giao_lai) conCho=true;
+      });
+      var ga=body.querySelector("[data-anh-tt]");
+      if(ga&&j.anh){ ga.textContent=j.anh.nhan; if(j.anh.tt==="xep_hang") conCho=true; }
+      if(coXong){ rkHen=setTimeout(function(){ if(cur.id===id&&ov.classList.contains("open")) load(false); },60000); return; }
+      if(conCho) rkHen=setTimeout(function(){ if(cur.id===id&&ov.classList.contains("open")) rkTheoDoi(cur.data||d,true); },60000);
+    }).catch(function(){});
+  }
   function render(d){
     /* RK_TABS (Sếp 2026-07-29): chia tab thay vì cuộn dài. Mỗi nhóm vào một pane;
        tất cả pane nằm sẵn trong DOM (chỉ ẩn/hiện) nên handler nút gắn một lần
@@ -3146,14 +3170,18 @@ window.hubErrText = function (e) {
       });
       if(!(d.screenshots&&d.screenshots.length)){
         h+='<div class="rk-gap"><span>🖼️ Ảnh store (screenshot + feature)</span>'
-          +'<span class="rk-meta">Dùng nút "Cập nhật từ Figma" bên dưới</span></div>';
+          +'<span class="rk-meta" data-anh-tt>Đang xem hàng đợi xuất ảnh…</span></div>';
       }
       h+='</div>';
     }
-    if(d.missing&&d.missing.length){
-      h+='<div class="rk-miss">Thiếu: '+d.missing.map(esc).join(" · ")+'</div>';
+    /* Dòng đỏ chỉ liệt kê TÊN mục còn thiếu; chi tiết + tiến độ nằm ở từng dòng phía trên (Sếp 28/10/2026). */
+    var thieuNgan=gaps.map(function(g){ return g.t.replace(/\s*\(.*\)\s*$/,""); });
+    if(!(d.screenshots&&d.screenshots.length)) thieuNgan.push("Ảnh store");
+    if(thieuNgan.length){
+      h+='<div class="rk-miss">Còn thiếu: '+thieuNgan.map(esc).join(" · ")+'</div>';
     }
     body.innerHTML=h;
+    rkTheoDoi(d, gaps.length>0 || !(d.screenshots&&d.screenshots.length));
     /* RK_MOTA_FULL: lucide chỉ thay <i data-lucide> lúc được gọi → vẽ sau mỗi lần render. */
     try{ window.lucide&&lucide.createIcons(); }catch(_){ }
     // Đổi tab: chỉ bật/tắt pane, không dựng lại DOM.
@@ -3180,7 +3208,8 @@ window.hubErrText = function (e) {
           var j=await r.json();
           if(!r.ok||j.ok===false) throw new Error(j.error||("HTTP "+r.status));
           b.textContent="✅ Đã giao AI";
-          st.textContent=j.message||"Đã gửi thông báo lên Discord + assign @Tranquil_Bot.";
+          st.textContent=j.message||"Đã giao đội AI.";
+          setTimeout(function(){ rkTheoDoi(cur.data||{},true); },1500);
         }catch(e){
           b.innerHTML=old; st.style.color="#b91c1c";
           st.textContent="❌ "+hubErrText(e)+(/PIN/i.test(e.message)?" (nút này cần build PIN admin)":"");
@@ -3290,7 +3319,7 @@ window.hubErrText = function (e) {
   rf.onclick=function(){
     /* PIN_ONCE: xác nhận trước khi export lại — thao tác này gọi Figma (tốn hạn
        mức) và ghi đè bộ ảnh đang dùng. */
-    if(!confirm("Export lại ảnh store từ Figma cho "+cur.id+"?\n\nSẽ ghi đè bộ ảnh hiện tại và tốn hạn mức Figma.")) return;
+    if(!confirm("Export lại ảnh store từ Figma cho "+(cur.name||cur.id)+"?\n\nSẽ ghi đè bộ ảnh hiện tại và tốn hạn mức Figma.")) return;
     load(true);
   };
 
@@ -3466,7 +3495,11 @@ window.hubErrText = function (e) {
           try{ b = JSON.parse(opt.body || "{}"); }catch(e){}
           if (b && b.pin){
             var nhan = TEN[path] || path.replace("/api/","");
-            var app  = b.app_id ? ' cho "' + b.app_id + '"' : "";
+            /* Hiện TÊN app (allApps), không hiện mã app_id — Sếp 28/10/2026: "sao ko hiện tên app mà lại hiện reelquill". */
+            var tenApp = b.app_id;
+            try { var ap = (typeof allApps !== "undefined" ? allApps : []).find(function(x){ return x.id === b.app_id; });
+                  if (ap && ap.name) tenApp = ap.name; } catch(e){}
+            var app  = b.app_id ? ' cho "' + tenApp + '"' : "";
             /* Dialog trong hệ thiết kế thay cho window.confirm() mặc định
                của trình duyệt (Sếp 2026-07-30: "giao diện đéo gì đây"). */
             return hoiXacNhan("Xác nhận " + nhan + app + "?").then(function(dongY){
