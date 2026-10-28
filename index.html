@@ -2854,6 +2854,7 @@ window.hubErrText = function (e) {
   .rk-fv.tall{max-height:460px;overflow:auto}
   .rk-fv.mono{font:600 .8rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;color:#334155;word-break:break-all}
   /* Khối "nhắc bot gen": CHỈ admin (build PIN) — 3 endpoint gen đều gate BUILD_PIN. */
+  body.aab-authed:not(.partner-authed) .rk-miss{display:none}
   .rk-admin{display:none;margin-top:18px;border-top:1px dashed #e2e8f0;padding-top:10px}
   body.aab-authed:not(.partner-authed) .rk-admin{display:block}
   .rk-gap{display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -2894,7 +2895,7 @@ window.hubErrText = function (e) {
   <p class="rk-sub" id="rkSub"></p>
   <div id="rkBody"></div>
   <div class="rk-act">
-    <button type="button" class="rk-rf" id="rkRf" title="Export lại ảnh từ Figma (dùng khi vừa sửa Figma)">Cập nhật từ Figma</button>
+    <button type="button" class="rk-rf" id="rkRf" hidden title="Export lại ảnh từ Figma (dùng khi vừa sửa Figma)">Cập nhật từ Figma</button>
     <button type="button" class="rk-cl" id="rkCl">Đóng</button>
   </div>
   <div id="rkSt"></div>
@@ -3027,8 +3028,8 @@ window.hubErrText = function (e) {
         if(s.xong) coXong=true; else if(!s.giao_lai) conCho=true;
       });
       var ga=body.querySelector("[data-anh-tt]");
-      if(ga&&j.anh){ ga.textContent=j.anh.nhan; if(j.anh.tt==="xep_hang") conCho=true; }
-      if(coXong){ rkHen=setTimeout(function(){ if(cur.id===id&&ov.classList.contains("open")) load(false); },60000); return; }
+      if(ga&&j.anh){ ga.textContent=j.anh.nhan; if(j.anh.tt==="xong") coXong=true; else if(j.anh.tt==="xep_hang"||j.anh.tt==="dang_xuat") conCho=true; }
+      if(coXong){ rkHen=setTimeout(function(){ if(cur.id===id&&ov.classList.contains("open")) load(false); },2000); return; }
       if(conCho) rkHen=setTimeout(function(){ if(cur.id===id&&ov.classList.contains("open")) rkTheoDoi(cur.data||d,true); },60000);
     }).catch(function(){});
   }
@@ -3163,7 +3164,7 @@ window.hubErrText = function (e) {
     if(!d.data_safety) gaps.push({ep:'gendatasafety',t:'Data safety CSV',ic:'🛡️'});
     if(!d.privacy_url||!d.terms_url) gaps.push({ep:'genlegal',t:'Privacy Policy + Terms',ic:'⚖️'});
     if(gaps.length||!(d.screenshots&&d.screenshots.length)){
-      h+='<div class="rk-admin"><div class="rk-sec">Thiếu dữ liệu — giao AI làm (chỉ admin)</div>';
+      h+='<div class="rk-admin"><div class="rk-sec">Còn thiếu</div>';
       gaps.forEach(function(g){
         h+='<div class="rk-gap"><span>'+g.ic+' '+esc(g.t)+'</span>'
           +'<button type="button" class="rk-one" data-gen="'+g.ep+'">✨ Giao AI làm</button></div>';
@@ -3780,7 +3781,7 @@ window.hubErrText = function (e) {
     ', rồi bấm tiếp và lưu lại.': [', rồi bấm tiếp và lưu lại.', ', then continue and save.'],
     'Mở Privacy':           ['Mở Privacy', 'Open Privacy'],
     'Mở Terms':             ['Mở Terms', 'Open Terms'],
-    'Thiếu dữ liệu — giao AI làm (chỉ admin)': ['Thiếu dữ liệu — giao AI làm (chỉ admin)', 'Missing data — let AI do it (admin only)'],
+    'Còn thiếu': ['Còn thiếu', 'Missing'],
     '🖼️ Ảnh store (screenshot + feature)': ['🖼️ Ảnh store (screenshot + feature)', '🖼️ Store images (screenshots + feature)'],
     'Dùng nút "Cập nhật từ Figma" bên dưới': ['Dùng nút "Cập nhật từ Figma" bên dưới', 'Use the "Update from Figma" button below'],
     'Thiếu:':               ['Thiếu:', 'Missing:'],
